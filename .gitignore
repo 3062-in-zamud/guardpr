@@ -5,3 +5,8 @@ coverage/
 *.tgz
 tmp/
 .DS_Store
+
+# dist/ - only keep ncc build output (index.js, licenses.txt)
+dist/*
+!dist/index.js
+!dist/licenses.txt

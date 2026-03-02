@@ -1,1 +1,0 @@
-{"version":3,"file":"xss-sanitization.d.ts","sourceRoot":"","sources":["file:///Users/3062_in_zamud/workspaces/guardpr/src/patching/strategies/xss-sanitization.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,OAAO,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;AAK7C,qBAAa,uBAAuB;IAE5B,QAAQ,CAAC,OAAO,EAAE,OAAO,EAAE,OAAO,EAAE,MAAM,GAAG,OAAO,CAAC,KAAK,CAAC;CAsGlE"}
