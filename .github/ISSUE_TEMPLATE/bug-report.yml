@@ -1,0 +1,86 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in GuardPR
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out the information below to help us investigate.
+
+  - type: input
+    id: version
+    attributes:
+      label: GuardPR Version
+      description: Which version of GuardPR are you using?
+      placeholder: "e.g., v1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner Type
+      description: What GitHub Actions runner are you using?
+      options:
+        - ubuntu-latest
+        - ubuntu-22.04
+        - ubuntu-20.04
+        - self-hosted
+        - other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scanner
+    attributes:
+      label: Affected Scanner
+      description: Which scanner is affected?
+      options:
+        - Secrets (Gitleaks)
+        - Dependencies (OSV-Scanner)
+        - XSS (built-in)
+        - Authorization (built-in)
+        - All
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of the bug
+      placeholder: Describe what happened and what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Configure GuardPR with...
+        2. Run the action on...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow YAML
+      description: Your GitHub Actions workflow configuration (redact any secrets)
+      render: yaml
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Action Logs
+      description: Relevant log output from the GitHub Actions run (redact any secrets)
+      render: text
+    validations:
+      required: false
