@@ -81,6 +81,13 @@ export function checkMiddleware(
       if (missing.length === required.length) {
         // All required middleware is missing — very clear violation
         confidence = 0.95;
+        // If an alternative auth middleware from the config is present, lower confidence
+        const hasAnyAuthMiddleware = route.middlewares.some((routeMw) =>
+          config.authMiddleware.some((authMw) => routeMw === authMw || routeMw.includes(authMw)),
+        );
+        if (hasAnyAuthMiddleware) {
+          confidence = 0.3;
+        }
       } else {
         // Some middleware present — partial violation
         confidence = 0.7;

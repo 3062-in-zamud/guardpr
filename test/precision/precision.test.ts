@@ -282,9 +282,8 @@ describe("precision dataset", () => {
         `Authz precision: ${precision.toFixed(3)}, recall: ${recall.toFixed(3)}, Wilson 95% CI: [${ci.lower.toFixed(3)}, ${ci.upper.toFixed(3)}]`,
       );
 
-      // Authz precision is lower (0.71) due to known limitations:
-      // router-level middleware and custom middleware name recognition
-      expect(precision).toBeGreaterThanOrEqual(0.7);
+      // Authz precision improved via router.use() detection and alt-middleware recognition
+      expect(precision).toBeGreaterThanOrEqual(0.85);
       expect(recall).toBeGreaterThanOrEqual(0.5);
     });
   });

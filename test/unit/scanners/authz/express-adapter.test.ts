@@ -74,4 +74,54 @@ router.post("/items", isAuth, (req, res) => { res.json({}); });
     expect(routes.length).toBe(2);
     expect(routes[0]!.middlewares).toContain("isAuth");
   });
+
+  it("should detect router.use() file-level middleware", () => {
+    const content = `
+import express from "express";
+const router = express.Router();
+router.use(isAuthenticated);
+router.get("/api/admin/users", (req, res) => { res.json([]); });
+`;
+    const routes = extractExpressRoutes(content, "router-use.ts");
+    expect(routes.length).toBe(1);
+    expect(routes[0]!.middlewares).toContain("isAuthenticated");
+  });
+
+  it("should detect app.use() file-level middleware", () => {
+    const content = `
+import express from "express";
+const app = express();
+app.use(isAuthenticated);
+app.get("/api/admin/users", (req, res) => { res.json([]); });
+`;
+    const routes = extractExpressRoutes(content, "app-use.ts");
+    expect(routes.length).toBe(1);
+    expect(routes[0]!.middlewares).toContain("isAuthenticated");
+  });
+
+  it("should not capture path-based .use() as file-level middleware", () => {
+    const content = `
+import express from "express";
+const app = express();
+app.use("/api", apiRouter);
+app.get("/api/admin/users", (req, res) => { res.json([]); });
+`;
+    const routes = extractExpressRoutes(content, "path-use.ts");
+    expect(routes.length).toBe(1);
+    expect(routes[0]!.middlewares).not.toContain("apiRouter");
+    expect(routes[0]!.middlewares).not.toContain("/api");
+  });
+
+  it("should combine .use() middleware with route-level middleware", () => {
+    const content = `
+import express from "express";
+const router = express.Router();
+router.use(isAuthenticated);
+router.get("/api/admin/users", isAdmin, (req, res) => { res.json([]); });
+`;
+    const routes = extractExpressRoutes(content, "combined.ts");
+    expect(routes.length).toBe(1);
+    expect(routes[0]!.middlewares).toContain("isAuthenticated");
+    expect(routes[0]!.middlewares).toContain("isAdmin");
+  });
 });

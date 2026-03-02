@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-03-02
+
+### Changed
+- Authz scanner precision improved to >= 85% (router-level middleware detection, alternative auth middleware recognition)
+
+### Added
+- CODEOWNERS file
+- docs/releasing.md release process documentation
+- GitHub Discussions enabled
+
+### Fixed
+- E2E workflow path filters (added action.yml, test/e2e/**, test/fixtures/**)
+- Precision workflow path filters (added src/scanners/**)
+
+### Infrastructure
+- .gitignore cleanup (exclude .claude/, CLAUDE.md)
+
 ## [1.0.0] - 2026-03-02
 
 ### Changed

@@ -184,4 +184,52 @@ describe("checkMiddleware", () => {
     expect(violations.length).toBe(2);
     expect(violations.every((v) => v.route.path.startsWith("/api/admin/"))).toBe(true);
   });
+
+  it("should lower confidence when alternative auth middleware is present", () => {
+    const routes: RouteDefinition[] = [
+      {
+        method: "GET",
+        path: "/api/admin/users",
+        middlewares: ["requireAuth", "(req", "res)"],
+        file: "app.ts",
+        line: 10,
+      },
+    ];
+
+    const config = makeConfig({
+      authMiddleware: ["isAuthenticated", "isAdmin", "requireAuth"],
+      protectedRoutes: [
+        { pattern: "/api/admin/**", requiredMiddleware: ["isAuthenticated", "isAdmin"] },
+      ],
+    });
+
+    const violations = checkMiddleware(routes, config);
+    expect(violations.length).toBe(1);
+    expect(violations[0]!.confidence).toBe(0.3);
+  });
+
+  it("should not lower confidence for partial-auth (not all required missing)", () => {
+    const routes: RouteDefinition[] = [
+      {
+        method: "GET",
+        path: "/api/admin/dashboard",
+        middlewares: ["isAuthenticated", "(req", "res)"],
+        file: "app.ts",
+        line: 10,
+      },
+    ];
+
+    const config = makeConfig({
+      authMiddleware: ["isAuthenticated", "isAdmin", "requireAuth"],
+      protectedRoutes: [
+        { pattern: "/api/admin/**", requiredMiddleware: ["isAuthenticated", "isAdmin"] },
+      ],
+    });
+
+    const violations = checkMiddleware(routes, config);
+    expect(violations.length).toBe(1);
+    // missing = ["isAdmin"], required = ["isAuthenticated", "isAdmin"]
+    // missing.length (1) != required.length (2) -> confidence stays at 0.7
+    expect(violations[0]!.confidence).toBe(0.7);
+  });
 });

@@ -3,10 +3,16 @@ name: Precision Gate
 on:
   push:
     branches: [main]
-    paths: ["src/scoring/**", "test/precision/**"]
+    paths:
+      - "src/scoring/**"
+      - "src/scanners/**"
+      - "test/precision/**"
   pull_request:
     branches: [main]
-    paths: ["src/scoring/**", "test/precision/**"]
+    paths:
+      - "src/scoring/**"
+      - "src/scanners/**"
+      - "test/precision/**"
 
 permissions:
   contents: read

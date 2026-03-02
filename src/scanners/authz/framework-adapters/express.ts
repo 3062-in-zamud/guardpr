@@ -29,6 +29,16 @@ export function extractExpressRoutes(content: string, filePath: string): RouteDe
   const routes: RouteDefinition[] = [];
   const lines = content.split("\n");
 
+  // Collect file-level middleware from .use() calls (without path arguments)
+  const fileLevelMiddlewares: string[] = [];
+  const usePattern = /\b(?:app|router)\s*\.\s*use\s*\(\s*([a-zA-Z_$][\w$.]*)\s*\)/g;
+  let useMatch: RegExpExecArray | null;
+  while ((useMatch = usePattern.exec(content)) !== null) {
+    if (useMatch[1] !== undefined) {
+      fileLevelMiddlewares.push(useMatch[1]);
+    }
+  }
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i] ?? "";
     const trimmed = line.trimStart();
@@ -88,7 +98,7 @@ export function extractExpressRoutes(content: string, filePath: string): RouteDe
       routes.push({
         method,
         path: routePath,
-        middlewares,
+        middlewares: [...fileLevelMiddlewares, ...middlewares],
         file: filePath,
         line: i + 1,
       });

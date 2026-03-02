@@ -3,10 +3,20 @@ name: E2E Tests
 on:
   push:
     branches: [main]
-    paths: ["src/**"]
+    paths:
+      - "src/**"
+      - "action.yml"
+      - ".github/workflows/e2e.yml"
+      - "test/e2e/**"
+      - "test/fixtures/**"
   pull_request:
     branches: [main]
-    paths: ["src/**"]
+    paths:
+      - "src/**"
+      - "action.yml"
+      - ".github/workflows/e2e.yml"
+      - "test/e2e/**"
+      - "test/fixtures/**"
 
 permissions:
   contents: read
