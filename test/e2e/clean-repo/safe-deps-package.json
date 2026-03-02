@@ -1,0 +1,12 @@
+{
+  "name": "safe-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "lodash": "4.17.21",
+    "express": "4.21.2",
+    "json5": "2.2.3",
+    "minimatch": "9.0.4",
+    "qs": "6.13.1"
+  }
+}

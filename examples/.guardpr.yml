@@ -1,0 +1,86 @@
+# GuardPR Configuration
+# Place this file at the root of your repository as .guardpr.yml
+
+# Minimum confidence score to generate a fix PR.
+# Range: 0.0 - 1.0. Higher values mean fewer but more precise findings.
+# Default: 0.9
+confidenceThreshold: 0.9
+
+# Whether to create a draft PR for generated fixes.
+# Set to false for report-only mode (findings in audit log only).
+# Default: true
+createPr: true
+
+# Whether to run tests after applying generated patches.
+# If tests fail, the PR is still created but marked as tests-failed.
+# Default: true
+runTests: true
+
+# Command to run for test validation after applying patches.
+# Default: "npm test"
+testCommand: "npm test"
+
+# Scanner configuration. Each scanner can be enabled/disabled independently.
+scanners:
+  # Secret detection via Gitleaks.
+  secrets:
+    # Enable or disable secret scanning.
+    # Default: true
+    enabled: true
+    # Maximum file size to scan in megabytes. Larger files are skipped.
+    # Default: 10
+    maxTargetMegabytes: 10
+
+  # Dependency vulnerability detection via OSV-Scanner.
+  dependencies:
+    # Enable or disable dependency scanning.
+    # Scans lockfiles: package-lock.json, yarn.lock, pnpm-lock.yaml, etc.
+    # Default: true
+    enabled: true
+
+  # XSS pattern detection (built-in regex scanner).
+  xss:
+    # Enable or disable XSS scanning.
+    # Scans .ts, .tsx, .js, .jsx files.
+    # Default: true
+    enabled: true
+    # Custom sanitizer function names. If found near a potential XSS pattern,
+    # confidence is reduced (indicating the code may already be safe).
+    # Built-in sanitizers: DOMPurify.sanitize, escapeHtml, encodeURIComponent, etc.
+    # Default: []
+    customSanitizers: []
+
+  # Authorization check detection (built-in scanner).
+  authz:
+    # Enable or disable authorization scanning.
+    # Default: true
+    enabled: true
+    # Framework to use for route detection.
+    # "auto" attempts to detect Express or Next.js automatically.
+    # Options: auto, express, nextjs
+    # Default: auto
+    framework: auto
+    # Middleware function names that indicate authentication/authorization.
+    # Routes matching protectedRoutes patterns are checked for these middleware.
+    # Default: [isAuthenticated, isAdmin, requireAuth]
+    authMiddleware:
+      - isAuthenticated
+      - isAdmin
+      - requireAuth
+    # Routes that require specific auth middleware.
+    # Each entry has a pattern (glob) and requiredMiddleware (list of names).
+    # Default: []
+    protectedRoutes:
+      - pattern: "/api/admin/*"
+        requiredMiddleware: ["isAdmin"]
+      - pattern: "/api/*"
+        requiredMiddleware: ["isAuthenticated"]
+
+# Patching constraints.
+patching:
+  # Maximum number of lines a single patch can change.
+  # Default: 50
+  maxLinesPerPatch: 50
+  # Maximum number of files a single patch can modify.
+  # Default: 5
+  maxFilesPerPatch: 5

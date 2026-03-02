@@ -1,0 +1,62 @@
+name: GuardPR Advanced Security Scan
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scanner: [secrets, dependencies, xss, authz]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run GuardPR (${{ matrix.scanner }})
+        uses: 3062-in-zamud/guardpr@v1
+        id: guardpr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          config-path: ".guardpr.yml"
+          confidence-threshold: "0.85"
+          create-pr: "true"
+          run-tests: "true"
+          test-command: "npm test"
+          scanners: ${{ matrix.scanner }}
+
+      - name: Report results
+        if: always()
+        run: |
+          echo "## ${{ matrix.scanner }} scan results" >> $GITHUB_STEP_SUMMARY
+          echo "- Findings: ${{ steps.guardpr.outputs.findings-count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- High confidence: ${{ steps.guardpr.outputs.high-confidence-count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Low confidence: ${{ steps.guardpr.outputs.low-confidence-count }}" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ steps.guardpr.outputs.pr-url }}" ]; then
+            echo "- Fix PR: ${{ steps.guardpr.outputs.pr-url }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  aggregate:
+    runs-on: ubuntu-latest
+    needs: security-scan
+    if: always()
+    steps:
+      - name: Download all audit logs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: guardpr-audit-*
+          merge-multiple: true
+
+      - name: Summary
+        run: |
+          echo "## GuardPR scan complete" >> $GITHUB_STEP_SUMMARY
+          echo "All scanner audit logs are available as workflow artifacts." >> $GITHUB_STEP_SUMMARY

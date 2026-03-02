@@ -1,0 +1,16 @@
+{
+  "name": "app-express-safe",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "packages": {
+    "": {
+      "dependencies": {
+        "express": "4.21.2"
+      }
+    },
+    "node_modules/express": {
+      "version": "4.21.2",
+      "resolved": "https://registry.npmjs.org/express/-/express-4.21.2.tgz"
+    }
+  }
+}

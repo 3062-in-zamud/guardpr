@@ -1,0 +1,181 @@
+{
+  "results": [
+    {
+      "source": {
+        "path": "package-lock.json",
+        "type": "lockfile"
+      },
+      "packages": [
+        {
+          "package": {
+            "name": "lodash",
+            "version": "4.17.20",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-jf85-cpcp-j695",
+              "summary": "Prototype Pollution in lodash",
+              "details": "Versions of lodash prior to 4.17.21 are vulnerable to Regular Expression Denial of Service (ReDoS) via the toNumber, trim and trimEnd functions.",
+              "aliases": ["CVE-2020-28500"],
+              "severity": [
+                {
+                  "type": "CVSS_V3",
+                  "score": "5.3"
+                }
+              ],
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        { "introduced": "0" },
+                        { "fixed": "4.17.21" }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "references": [
+                {
+                  "type": "ADVISORY",
+                  "url": "https://github.com/advisories/GHSA-jf85-cpcp-j695"
+                }
+              ],
+              "database_specific": {
+                "cwe_ids": ["CWE-1333"]
+              }
+            },
+            {
+              "id": "GHSA-35jh-r3h4-6jhm",
+              "summary": "Command Injection in lodash",
+              "details": "Versions of lodash prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+              "aliases": ["CVE-2021-23337"],
+              "severity": [
+                {
+                  "type": "CVSS_V3",
+                  "score": "7.2"
+                }
+              ],
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        { "introduced": "0" },
+                        { "fixed": "4.17.21" }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "references": [
+                {
+                  "type": "ADVISORY",
+                  "url": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+                }
+              ],
+              "database_specific": {
+                "cwe_ids": ["CWE-77"]
+              }
+            }
+          ],
+          "groups": [
+            {
+              "ids": ["GHSA-jf85-cpcp-j695", "GHSA-35jh-r3h4-6jhm"],
+              "max_severity": "7.2"
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "express",
+            "version": "4.17.1",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-rv95-896h-c2vc",
+              "summary": "Express.js Open Redirect vulnerability",
+              "details": "Express versions before 4.19.2 are vulnerable to an open redirect vulnerability.",
+              "aliases": ["CVE-2024-29041"],
+              "severity": [
+                {
+                  "type": "CVSS_V3",
+                  "score": "6.1"
+                }
+              ],
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        { "introduced": "0" },
+                        { "fixed": "4.19.2" }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "references": [
+                {
+                  "type": "ADVISORY",
+                  "url": "https://github.com/advisories/GHSA-rv95-896h-c2vc"
+                }
+              ],
+              "database_specific": {
+                "cwe_ids": ["CWE-601"]
+              }
+            }
+          ]
+        },
+        {
+          "package": {
+            "name": "tar",
+            "version": "6.1.0",
+            "ecosystem": "npm"
+          },
+          "vulnerabilities": [
+            {
+              "id": "GHSA-r628-mhmh-qjhw",
+              "summary": "Arbitrary File Creation/Overwrite via insufficient symlink protection due to directory cache poisoning using symbolic links",
+              "details": "Arbitrary File Creation/Overwrite on Windows via insufficient relative path sanitization. The tar package has no prevention against extracting absolute or relative paths on Windows systems.",
+              "aliases": ["CVE-2021-37701"],
+              "severity": [
+                {
+                  "type": "CVSS_V3",
+                  "score": "8.6"
+                }
+              ],
+              "affected": [
+                {
+                  "ranges": [
+                    {
+                      "type": "SEMVER",
+                      "events": [
+                        { "introduced": "0" },
+                        { "fixed": "6.1.9" }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "references": [
+                {
+                  "type": "WEB",
+                  "url": "https://github.com/npm/node-tar/security/advisories/GHSA-r628-mhmh-qjhw"
+                }
+              ],
+              "database_specific": {
+                "cwe_ids": ["CWE-22"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"dependency-upgrade.d.ts","sourceRoot":"","sources":["file:///Users/3062_in_zamud/workspaces/guardpr/src/patching/strategies/dependency-upgrade.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,OAAO,EAAE,KAAK,EAAE,MAAM,aAAa,CAAC;AA8B7C,qBAAa,yBAAyB;IAE9B,QAAQ,CAAC,OAAO,EAAE,OAAO,EAAE,OAAO,EAAE,MAAM,GAAG,OAAO,CAAC,KAAK,CAAC;CAyElE"}

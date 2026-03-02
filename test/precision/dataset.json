@@ -1,0 +1,729 @@
+{
+  "version": "1.0",
+  "categories": {
+    "secrets": {
+      "tp": [
+        {
+          "id": "secrets-tp-001",
+          "file": "secrets/tp/aws-key.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "Real AWS access key pattern (AKIA prefix with 16 alphanumeric chars)"
+        },
+        {
+          "id": "secrets-tp-002",
+          "file": "secrets/tp/github-pat.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "Real GitHub personal access token pattern (ghp_ prefix)"
+        },
+        {
+          "id": "secrets-tp-003",
+          "file": "secrets/tp/rsa-key.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.9, 1.0],
+          "rationale": "Embedded RSA private key with BEGIN/END markers"
+        },
+        {
+          "id": "secrets-tp-004",
+          "file": "secrets/tp/api-key-env.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "API keys assigned directly to variables (Stripe sk_live, SendGrid SG. patterns)"
+        },
+        {
+          "id": "secrets-tp-005",
+          "file": "secrets/tp/connection-string.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Database connection strings with embedded passwords in URL format"
+        },
+        {
+          "id": "secrets-tp-006",
+          "file": "secrets/tp/aws-key.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "AWS secret access key alongside access key ID"
+        },
+        {
+          "id": "secrets-tp-007",
+          "file": "secrets/tp/connection-string.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "MySQL connection string with root password"
+        },
+        {
+          "id": "secrets-tp-008",
+          "file": "secrets/tp/connection-string.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "MongoDB connection string with embedded credentials"
+        },
+        {
+          "id": "secrets-tp-009",
+          "file": "secrets/tp/api-key-env.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "SendGrid API key pattern (SG. prefix)"
+        },
+        {
+          "id": "secrets-tp-010",
+          "file": "secrets/tp/github-pat.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "GitHub PAT used in Authorization header"
+        },
+        {
+          "id": "secrets-tp-011",
+          "file": "secrets/tp/rsa-key.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.9, 1.0],
+          "rationale": "RSA key exported via function return"
+        },
+        {
+          "id": "secrets-tp-012",
+          "file": "secrets/tp/aws-key.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "Credentials returned from function"
+        },
+        {
+          "id": "secrets-tp-013",
+          "file": "secrets/tp/api-key-env.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Stripe live key used in config export"
+        },
+        {
+          "id": "secrets-tp-014",
+          "file": "secrets/tp/connection-string.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Postgres connection string with admin password"
+        },
+        {
+          "id": "secrets-tp-015",
+          "file": "secrets/tp/github-pat.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "GitHub PAT in variable declaration"
+        }
+      ],
+      "fp": [
+        {
+          "id": "secrets-fp-001",
+          "file": "secrets/fp/placeholder.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "AWS documented example key (AKIAIOSFODNN7EXAMPLE) - not a real credential"
+        },
+        {
+          "id": "secrets-fp-002",
+          "file": "secrets/fp/test-data.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "Test fixture data with explicitly fake keys and mock tokens"
+        },
+        {
+          "id": "secrets-fp-003",
+          "file": "secrets/fp/env-example.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "Template content for .env.example with placeholder values"
+        },
+        {
+          "id": "secrets-fp-004",
+          "file": "secrets/fp/base64-data.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Base64-encoded config data and SHA-256 hashes, not secrets"
+        },
+        {
+          "id": "secrets-fp-005",
+          "file": "secrets/fp/comment-key.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Key patterns only in comments, not in executable code"
+        },
+        {
+          "id": "secrets-fp-006",
+          "file": "secrets/fp/placeholder.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "AWS example secret key paired with documented example key"
+        },
+        {
+          "id": "secrets-fp-007",
+          "file": "secrets/fp/test-data.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "Mock admin credentials for testing"
+        },
+        {
+          "id": "secrets-fp-008",
+          "file": "secrets/fp/env-example.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.5],
+          "rationale": "Placeholder GitHub token in template"
+        },
+        {
+          "id": "secrets-fp-009",
+          "file": "secrets/fp/base64-data.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "SVG icon encoded as base64"
+        },
+        {
+          "id": "secrets-fp-010",
+          "file": "secrets/fp/comment-key.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Documentation comments about key formats"
+        }
+      ]
+    },
+    "dependencies": {
+      "tp": [
+        {
+          "id": "deps-tp-001",
+          "file": "dependencies/tp/lodash-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "lodash 4.17.20 has known prototype pollution (CVE-2021-23337)"
+        },
+        {
+          "id": "deps-tp-002",
+          "file": "dependencies/tp/json5-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "json5 2.2.1 has prototype pollution (CVE-2022-46175)"
+        },
+        {
+          "id": "deps-tp-003",
+          "file": "dependencies/tp/minimatch-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "minimatch 3.0.4 has ReDoS vulnerability (CVE-2022-3517)"
+        },
+        {
+          "id": "deps-tp-004",
+          "file": "dependencies/tp/qs-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "qs 6.5.2 has prototype pollution vulnerability"
+        },
+        {
+          "id": "deps-tp-005",
+          "file": "dependencies/tp/express-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "express 4.17.1 has multiple known vulnerabilities in transitive deps"
+        },
+        {
+          "id": "deps-tp-006",
+          "file": "dependencies/tp/lodash-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "lodash command injection CVE-2021-23337"
+        },
+        {
+          "id": "deps-tp-007",
+          "file": "dependencies/tp/json5-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "json5 allows uncontrolled resource consumption"
+        },
+        {
+          "id": "deps-tp-008",
+          "file": "dependencies/tp/minimatch-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "minimatch ReDoS via brace expansion"
+        },
+        {
+          "id": "deps-tp-009",
+          "file": "dependencies/tp/qs-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "qs prototype poisoning"
+        },
+        {
+          "id": "deps-tp-010",
+          "file": "dependencies/tp/express-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "express open redirect vulnerability"
+        },
+        {
+          "id": "deps-tp-011",
+          "file": "dependencies/tp/lodash-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "lodash ReDoS in trimEnd"
+        },
+        {
+          "id": "deps-tp-012",
+          "file": "dependencies/tp/json5-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "json5 arbitrary code execution via crafted input"
+        },
+        {
+          "id": "deps-tp-013",
+          "file": "dependencies/tp/minimatch-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "minimatch catastrophic backtracking"
+        },
+        {
+          "id": "deps-tp-014",
+          "file": "dependencies/tp/qs-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "qs allows overriding of Object prototype properties"
+        },
+        {
+          "id": "deps-tp-015",
+          "file": "dependencies/tp/express-vulnerable.json",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "express path traversal in static file serving"
+        }
+      ],
+      "fp": [
+        {
+          "id": "deps-fp-001",
+          "file": "dependencies/fp/lodash-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "lodash 4.17.21 is the latest patched version"
+        },
+        {
+          "id": "deps-fp-002",
+          "file": "dependencies/fp/json5-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "json5 2.2.3 is patched"
+        },
+        {
+          "id": "deps-fp-003",
+          "file": "dependencies/fp/minimatch-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "minimatch 9.0.4 is a major version upgrade, fully patched"
+        },
+        {
+          "id": "deps-fp-004",
+          "file": "dependencies/fp/qs-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "qs 6.13.1 is patched"
+        },
+        {
+          "id": "deps-fp-005",
+          "file": "dependencies/fp/express-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "express 4.21.2 is the latest patched version"
+        },
+        {
+          "id": "deps-fp-006",
+          "file": "dependencies/fp/lodash-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "No known CVEs for lodash 4.17.21"
+        },
+        {
+          "id": "deps-fp-007",
+          "file": "dependencies/fp/json5-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "json5 2.2.3 fixes CVE-2022-46175"
+        },
+        {
+          "id": "deps-fp-008",
+          "file": "dependencies/fp/minimatch-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "minimatch 9.x rewrites the matching engine"
+        },
+        {
+          "id": "deps-fp-009",
+          "file": "dependencies/fp/qs-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "qs 6.13.1 has no known vulnerabilities"
+        },
+        {
+          "id": "deps-fp-010",
+          "file": "dependencies/fp/express-safe.json",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "express 4.21.2 patches all known CVEs"
+        }
+      ]
+    },
+    "xss": {
+      "tp": [
+        {
+          "id": "xss-tp-001",
+          "file": "xss/tp/dangerous-inner-html.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "dangerouslySetInnerHTML with variable (non-literal) content prop"
+        },
+        {
+          "id": "xss-tp-002",
+          "file": "xss/tp/inner-html-assign.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Direct innerHTML assignment with user-controlled value"
+        },
+        {
+          "id": "xss-tp-003",
+          "file": "xss/tp/eval-dynamic.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "eval() called with dynamic user expression"
+        },
+        {
+          "id": "xss-tp-004",
+          "file": "xss/tp/javascript-href.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "javascript: protocol in href attribute"
+        },
+        {
+          "id": "xss-tp-005",
+          "file": "xss/tp/user-input-url.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "href constructed from searchParams (user input)"
+        },
+        {
+          "id": "xss-tp-006",
+          "file": "xss/tp/inner-html-assign.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "outerHTML assignment with user-controlled markup"
+        },
+        {
+          "id": "xss-tp-007",
+          "file": "xss/tp/eval-dynamic.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "new Function() with user-provided code body"
+        },
+        {
+          "id": "xss-tp-008",
+          "file": "xss/tp/dangerous-inner-html.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "React component renders untrusted HTML"
+        },
+        {
+          "id": "xss-tp-009",
+          "file": "xss/tp/javascript-href.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Inline JavaScript execution via href"
+        },
+        {
+          "id": "xss-tp-010",
+          "file": "xss/tp/user-input-url.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "URL from user-controlled searchParams"
+        },
+        {
+          "id": "xss-tp-011",
+          "file": "xss/tp/eval-dynamic.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "eval called on template result"
+        },
+        {
+          "id": "xss-tp-012",
+          "file": "xss/tp/inner-html-assign.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "innerHTML used for rendering comments"
+        },
+        {
+          "id": "xss-tp-013",
+          "file": "xss/tp/dangerous-inner-html.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Unescaped content passed to __html"
+        },
+        {
+          "id": "xss-tp-014",
+          "file": "xss/tp/javascript-href.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "XSS payload via javascript: scheme"
+        },
+        {
+          "id": "xss-tp-015",
+          "file": "xss/tp/user-input-url.tsx",
+          "label": "tp",
+          "expectedConfidenceRange": [0.8, 1.0],
+          "rationale": "Redirect URL from query parameters"
+        }
+      ],
+      "fp": [
+        {
+          "id": "xss-fp-001",
+          "file": "xss/fp/sanitized-inner-html.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "dangerouslySetInnerHTML used but content is DOMPurify.sanitize()'d"
+        },
+        {
+          "id": "xss-fp-002",
+          "file": "xss/fp/static-string.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "dangerouslySetInnerHTML with a static string literal"
+        },
+        {
+          "id": "xss-fp-003",
+          "file": "xss/fp/text-content.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "Uses textContent (safe) not innerHTML"
+        },
+        {
+          "id": "xss-fp-004",
+          "file": "xss/fp/encoded-output.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "User input is encodeURIComponent'd before display, no innerHTML"
+        },
+        {
+          "id": "xss-fp-005",
+          "file": "xss/fp/test-file.test.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "XSS-like patterns in a test file are not production vulnerabilities"
+        },
+        {
+          "id": "xss-fp-006",
+          "file": "xss/fp/sanitized-inner-html.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Sanitizer call within same function scope"
+        },
+        {
+          "id": "xss-fp-007",
+          "file": "xss/fp/static-string.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "No dynamic content in dangerouslySetInnerHTML"
+        },
+        {
+          "id": "xss-fp-008",
+          "file": "xss/fp/text-content.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "textContent is XSS-safe DOM property"
+        },
+        {
+          "id": "xss-fp-009",
+          "file": "xss/fp/encoded-output.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "Output encoding prevents XSS"
+        },
+        {
+          "id": "xss-fp-010",
+          "file": "xss/fp/test-file.test.tsx",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "Test file with innerHTML in test setup"
+        }
+      ]
+    },
+    "authz": {
+      "tp": [
+        {
+          "id": "authz-tp-001",
+          "file": "authz/tp/admin-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "GET /api/admin/users route with no auth middleware"
+        },
+        {
+          "id": "authz-tp-002",
+          "file": "authz/tp/admin-post-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "POST /api/admin/settings route without auth"
+        },
+        {
+          "id": "authz-tp-003",
+          "file": "authz/tp/admin-delete-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "DELETE /api/admin/users/:id route without auth"
+        },
+        {
+          "id": "authz-tp-004",
+          "file": "authz/tp/api-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Billing API routes without authentication"
+        },
+        {
+          "id": "authz-tp-005",
+          "file": "authz/tp/partial-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Admin route has isAuthenticated but missing isAdmin"
+        },
+        {
+          "id": "authz-tp-006",
+          "file": "authz/tp/admin-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Admin endpoint accessible without authentication"
+        },
+        {
+          "id": "authz-tp-007",
+          "file": "authz/tp/admin-post-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Write operation on admin resource without auth"
+        },
+        {
+          "id": "authz-tp-008",
+          "file": "authz/tp/admin-delete-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Destructive operation without authorization check"
+        },
+        {
+          "id": "authz-tp-009",
+          "file": "authz/tp/api-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "POST /api/billing/charge without auth - financial operation"
+        },
+        {
+          "id": "authz-tp-010",
+          "file": "authz/tp/partial-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Insufficient authorization - authenticated but not admin"
+        },
+        {
+          "id": "authz-tp-011",
+          "file": "authz/tp/admin-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "No middleware between route and handler"
+        },
+        {
+          "id": "authz-tp-012",
+          "file": "authz/tp/admin-post-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "Settings mutation without any access control"
+        },
+        {
+          "id": "authz-tp-013",
+          "file": "authz/tp/admin-delete-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.7, 1.0],
+          "rationale": "User deletion endpoint without auth"
+        },
+        {
+          "id": "authz-tp-014",
+          "file": "authz/tp/api-no-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Invoice listing without authentication"
+        },
+        {
+          "id": "authz-tp-015",
+          "file": "authz/tp/partial-auth.ts",
+          "label": "tp",
+          "expectedConfidenceRange": [0.6, 1.0],
+          "rationale": "Dashboard access without admin role verification"
+        }
+      ],
+      "fp": [
+        {
+          "id": "authz-fp-001",
+          "file": "authz/fp/fully-protected.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "Admin routes with both isAuthenticated and isAdmin middleware"
+        },
+        {
+          "id": "authz-fp-002",
+          "file": "authz/fp/public-route.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "Public health check and docs routes, no auth needed"
+        },
+        {
+          "id": "authz-fp-003",
+          "file": "authz/fp/router-level-auth.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Auth middleware applied at router level via router.use()"
+        },
+        {
+          "id": "authz-fp-004",
+          "file": "authz/fp/custom-middleware.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "Uses requireAuth middleware (one of the default auth middleware names)"
+        },
+        {
+          "id": "authz-fp-005",
+          "file": "authz/fp/non-api-route.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "Static content routes (/, /about, /login) - not API endpoints"
+        },
+        {
+          "id": "authz-fp-006",
+          "file": "authz/fp/fully-protected.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "POST admin route with full middleware chain"
+        },
+        {
+          "id": "authz-fp-007",
+          "file": "authz/fp/public-route.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "Documentation endpoint is intentionally public"
+        },
+        {
+          "id": "authz-fp-008",
+          "file": "authz/fp/router-level-auth.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.3],
+          "rationale": "Router-level middleware protects all child routes"
+        },
+        {
+          "id": "authz-fp-009",
+          "file": "authz/fp/custom-middleware.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.2],
+          "rationale": "Custom auth middleware validates Authorization header"
+        },
+        {
+          "id": "authz-fp-010",
+          "file": "authz/fp/non-api-route.ts",
+          "label": "fp",
+          "expectedConfidenceRange": [0.0, 0.1],
+          "rationale": "Login page must be publicly accessible"
+        }
+      ]
+    }
+  }
+}

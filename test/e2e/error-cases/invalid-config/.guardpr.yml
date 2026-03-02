@@ -1,0 +1,10 @@
+confidenceThreshold: "not-a-number"
+createPr: 42
+scanners:
+  secrets:
+    enabled: "yes"
+    maxTargetMegabytes: -5
+  unknown_scanner:
+    enabled: true
+patching:
+  maxLinesPerPatch: 0

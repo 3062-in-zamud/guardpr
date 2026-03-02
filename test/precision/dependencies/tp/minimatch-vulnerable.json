@@ -1,0 +1,16 @@
+{
+  "name": "app-minimatch-vuln",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "packages": {
+    "": {
+      "dependencies": {
+        "minimatch": "3.0.4"
+      }
+    },
+    "node_modules/minimatch": {
+      "version": "3.0.4",
+      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+name: "GuardPR Security Scan"
+description: "Automated security vulnerability detection and fix PR generation"
+author: "3062-in-zamud"
+
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  config-path:
+    description: "Path to .guardpr.yml configuration file"
+    required: false
+    default: ".guardpr.yml"
+  confidence-threshold:
+    description: "Minimum confidence score to generate a fix PR (0.0 - 1.0)"
+    required: false
+    default: "0.9"
+  create-pr:
+    description: "Whether to create a draft PR for fixes"
+    required: false
+    default: "true"
+  run-tests:
+    description: "Whether to run tests after applying patches"
+    required: false
+    default: "true"
+  test-command:
+    description: "Custom test command to run after applying patches"
+    required: false
+    default: "npm test"
+  scanners:
+    description: "Comma-separated list of scanners to run (default: all)"
+    required: false
+    default: "all"
+  github-token:
+    description: "GitHub token for API access"
+    required: true
+
+outputs:
+  findings-count:
+    description: "Total number of findings"
+  high-confidence-count:
+    description: "Number of high-confidence findings"
+  low-confidence-count:
+    description: "Number of low-confidence findings"
+  pr-url:
+    description: "URL of the created draft PR (if any)"
+  pr-number:
+    description: "Number of the created draft PR (if any)"
+  audit-artifact-name:
+    description: "Name of the uploaded audit log artifact"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"

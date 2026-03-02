@@ -1,0 +1,54 @@
+[
+  {
+    "RuleID": "aws-access-key-id",
+    "Description": "AWS Access Key ID",
+    "StartLine": 12,
+    "EndLine": 12,
+    "StartColumn": 5,
+    "EndColumn": 45,
+    "Match": "AKIAIOSFODNN7EXAMPLE",
+    "Secret": "AKIAIOSFODNN7EXAMPLE",
+    "File": "src/config/aws.ts",
+    "Entropy": 3.684,
+    "Tags": ["key", "aws"]
+  },
+  {
+    "RuleID": "github-pat",
+    "Description": "GitHub Personal Access Token",
+    "StartLine": 3,
+    "EndLine": 3,
+    "StartColumn": 20,
+    "EndColumn": 60,
+    "Match": "const token = \"ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh\"",
+    "Secret": "ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh",
+    "File": "scripts/deploy.sh",
+    "Entropy": 4.521,
+    "Tags": ["token", "github"]
+  },
+  {
+    "RuleID": "generic-api-key",
+    "Description": "Generic API Key",
+    "StartLine": 28,
+    "EndLine": 28,
+    "StartColumn": 1,
+    "EndColumn": 60,
+    "Match": "API_KEY=sk_live_1234567890abcdefghijklmnop",
+    "Secret": "sk_live_1234567890abcdefghijklmnop",
+    "File": ".env.production",
+    "Entropy": 4.102,
+    "Tags": ["api", "key"]
+  },
+  {
+    "RuleID": "generic-api-key",
+    "Description": "Generic API Key",
+    "StartLine": 5,
+    "EndLine": 5,
+    "StartColumn": 10,
+    "EndColumn": 40,
+    "Match": "apiKey: \"test_placeholder_key_12345\"",
+    "Secret": "test_placeholder_key_12345",
+    "File": "test/helpers/mock-config.ts",
+    "Entropy": 3.2,
+    "Tags": ["api", "key"]
+  }
+]

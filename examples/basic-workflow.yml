@@ -1,0 +1,20 @@
+name: GuardPR Security Scan
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: 3062-in-zamud/guardpr@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

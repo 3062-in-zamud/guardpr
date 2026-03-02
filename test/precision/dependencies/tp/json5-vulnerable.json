@@ -1,0 +1,16 @@
+{
+  "name": "app-json5-vuln",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "packages": {
+    "": {
+      "dependencies": {
+        "json5": "2.2.1"
+      }
+    },
+    "node_modules/json5": {
+      "version": "2.2.1",
+      "resolved": "https://registry.npmjs.org/json5/-/json5-2.2.1.tgz"
+    }
+  }
+}
