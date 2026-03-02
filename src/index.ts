@@ -1,6 +1,7 @@
-import * as core from "@actions/core";
 import * as fs from "fs";
 import * as path from "path";
+
+import * as core from "@actions/core";
 
 import { AuditLogger } from "./audit/logger";
 import { ArtifactUploader } from "./audit/artifact-uploader";
@@ -25,7 +26,7 @@ import { getContext } from "./utils/github";
 import { execCommand } from "./utils/exec";
 import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/logger";
 
-const VERSION = "0.1.0";
+const VERSION = "1.0.0-beta.1";
 
 function parseActionInputs(): ActionInputs {
   return {
@@ -264,9 +265,7 @@ async function run(): Promise<void> {
     if (patches.length > 0) {
       const applicablePatches = patches.filter(
         (p) =>
-          p.type === "auto-fix" &&
-          p.status !== "generation-failed" &&
-          p.status !== "tests-failed",
+          p.type === "auto-fix" && p.status !== "generation-failed" && p.status !== "tests-failed",
       );
       const appliedFiles = new Set<string>();
       for (const patch of applicablePatches) {
