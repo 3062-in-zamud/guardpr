@@ -642,10 +642,10 @@ export declare const auditLogSchema: z.ZodObject<{
         testOutput: z.ZodOptional<z.ZodString>;
         breakingRisk: z.ZodEnum<["none", "low", "medium", "high"]>;
     }, "strip", z.ZodTypeAny, {
+        type: "auto-fix" | "notification-only";
         status: "pending" | "tests-passed" | "tests-failed" | "tests-skipped" | "generation-failed";
         findingFingerprints: string[];
         title: string;
-        type: "auto-fix" | "notification-only";
         rationale: string;
         rollbackSteps: string[];
         fileChanges: {
@@ -656,10 +656,10 @@ export declare const auditLogSchema: z.ZodObject<{
         breakingRisk: "none" | "low" | "medium" | "high";
         testOutput?: string | undefined;
     }, {
+        type: "auto-fix" | "notification-only";
         status: "pending" | "tests-passed" | "tests-failed" | "tests-skipped" | "generation-failed";
         findingFingerprints: string[];
         title: string;
-        type: "auto-fix" | "notification-only";
         rationale: string;
         rollbackSteps: string[];
         fileChanges: {
@@ -829,10 +829,10 @@ export declare const auditLogSchema: z.ZodObject<{
         rawData?: Record<string, unknown> | undefined;
     }[];
     patches: {
+        type: "auto-fix" | "notification-only";
         status: "pending" | "tests-passed" | "tests-failed" | "tests-skipped" | "generation-failed";
         findingFingerprints: string[];
         title: string;
-        type: "auto-fix" | "notification-only";
         rationale: string;
         rollbackSteps: string[];
         fileChanges: {
@@ -1001,10 +1001,10 @@ export declare const auditLogSchema: z.ZodObject<{
         rawData?: Record<string, unknown> | undefined;
     }[];
     patches: {
+        type: "auto-fix" | "notification-only";
         status: "pending" | "tests-passed" | "tests-failed" | "tests-skipped" | "generation-failed";
         findingFingerprints: string[];
         title: string;
-        type: "auto-fix" | "notification-only";
         rationale: string;
         rollbackSteps: string[];
         fileChanges: {
