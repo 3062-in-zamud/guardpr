@@ -17,6 +17,19 @@
 
 GuardPR は、セキュリティ脆弱性の検出、修正パッチの生成、テストによる検証、Draft PR の作成までを 1 回のワークフロー実行で自動化する GitHub Action です。外部サービスへのデータ送信は一切ありません。
 
+## デモ
+
+GuardPR は脆弱性を検出し、修正 PR を自動生成します:
+
+![GuardPR スキャン結果](docs/images/scan-results.png)
+*Step Summary: 検出された脆弱性と信頼度スコアの一覧*
+
+![自動生成された修正 PR](docs/images/fix-pr.png)
+*Draft PR: 検出結果の詳細、修正内容、ロールバック手順*
+
+![修正 PR の差分](docs/images/fix-pr-diff.png)
+*自動パッチ: XSS 対策の DOMPurify 追加、未保護ルートへの認証ミドルウェア追加*
+
 ## クイックスタート
 
 **1.** リポジトリにワークフローファイルを追加します。

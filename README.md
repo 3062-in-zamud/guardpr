@@ -17,6 +17,19 @@
 
 GuardPR is a GitHub Action that automatically detects security vulnerabilities, generates fix patches, validates them with tests, and opens draft PRs -- all in a single workflow run. No external services, no data leaving your runner.
 
+## Demo
+
+GuardPR detects vulnerabilities and creates fix PRs automatically:
+
+![GuardPR scan results](docs/images/scan-results.png)
+*Step Summary showing detected vulnerabilities with confidence scores*
+
+![Auto-generated fix PR](docs/images/fix-pr.png)
+*Draft PR with findings, descriptions, and rollback instructions*
+
+![Fix PR diff](docs/images/fix-pr-diff.png)
+*Auto-generated patches: DOMPurify import for XSS, auth middleware for unprotected routes*
+
 ## Quick Start
 
 **1.** Add the workflow file to your repository:

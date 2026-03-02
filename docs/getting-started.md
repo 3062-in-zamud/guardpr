@@ -182,6 +182,57 @@ The generated patch might introduce changes that break existing tests. This is e
 - Disable scanners you do not need.
 - The first run is slower due to binary downloads. Subsequent runs use cached binaries.
 
+## Example: First Run Results
+
+When GuardPR runs on a real project, the Step Summary in the Actions tab shows results like this:
+
+| Metric | Count |
+|--------|-------|
+| Total findings | 25 |
+| High confidence | 22 |
+| Below threshold | 3 |
+| Patches generated | 22 |
+
+Typical projects with common dependencies will see **5-20 findings** on the first scan, primarily from:
+- Known CVEs in transitive dependencies (detected via OSV-Scanner)
+- XSS patterns like `dangerouslySetInnerHTML` or `eval()` usage
+- Routes missing authentication middleware
+
+All high-confidence findings generate patches and are bundled into a single draft PR with detailed descriptions and rollback instructions.
+
+## Fork Pull Requests
+
+When GuardPR runs on a pull request from a **forked repository**, the default `GITHUB_TOKEN` is read-only. This means:
+
+- **Scans run normally** -- vulnerabilities are detected and reported in the Step Summary.
+- **PR creation fails** -- the token cannot push branches or open PRs on the base repository.
+
+### Workaround: `pull_request_target`
+
+To enable full functionality for fork PRs, use the `pull_request_target` event:
+
+```yaml
+on:
+  pull_request_target:
+    branches: [main]
+```
+
+> **Security warning**: `pull_request_target` runs with write access to the base repository. Only use this if you trust contributors or add an approval gate (e.g., require a label before the workflow runs).
+
+```yaml
+jobs:
+  security-scan:
+    if: contains(github.event.pull_request.labels.*.name, 'safe-to-scan')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: 3062-in-zamud/guardpr@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ## Using outputs in subsequent steps
 
 ```yaml
