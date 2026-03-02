@@ -10,10 +10,6 @@ vi.mock("fs");
 
 const baseActionInputs: ActionInputs = {
   configPath: ".guardpr.yml",
-  confidenceThreshold: 0.9,
-  createPr: true,
-  runTests: true,
-  testCommand: "npm test",
   scanners: "all",
   githubToken: "ghp_testtoken123",
 };
@@ -69,6 +65,32 @@ patching:
     expect(config.scanners.secrets.maxTargetMegabytes).toBe(20);
     expect(config.scanners.xss.customSanitizers).toEqual(["mySanitizer"]);
     expect(config.patching.maxLinesPerPatch).toBe(100);
+  });
+
+  it("YAML config takes precedence when action input is not set", async () => {
+    const yamlContent = `
+confidenceThreshold: 0.7
+createPr: false
+testCommand: "yarn test"
+`;
+    vi.mocked(fs.readFileSync).mockReturnValue(yamlContent);
+
+    const config = await loadConfig(".guardpr.yml", baseActionInputs);
+
+    expect(config.confidenceThreshold).toBe(0.7);
+    expect(config.createPr).toBe(false);
+    expect(config.testCommand).toBe("yarn test");
+  });
+
+  it("runTests from YAML is respected when action input not set", async () => {
+    const yamlContent = `
+runTests: false
+`;
+    vi.mocked(fs.readFileSync).mockReturnValue(yamlContent);
+
+    const config = await loadConfig(".guardpr.yml", baseActionInputs);
+
+    expect(config.runTests).toBe(false);
   });
 
   it("applies scanner overrides from action inputs", async () => {

@@ -97,6 +97,10 @@ describe("XssSanitizationStrategy", () => {
     expect(patch.type).toBe("auto-fix");
     expect(patch.fileChanges[0]!.diff).toContain("SECURITY");
     expect(patch.fileChanges[0]!.diff).toContain("Function");
+    // modifiedContent should exist for direct file write in test-runner
+    expect(patch.fileChanges[0]!.modifiedContent).toBeDefined();
+    expect(patch.fileChanges[0]!.modifiedContent).toContain("Function");
+    expect(patch.fileChanges[0]!.modifiedContent).not.toContain("eval(code)");
   });
 
   it("does not duplicate DOMPurify import if already present", async () => {

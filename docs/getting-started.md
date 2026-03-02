@@ -17,6 +17,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   security-scan:
@@ -160,10 +161,11 @@ The action could not download a scanner binary. This is usually a transient netw
 
 ### PR not created
 
-1. Ensure the workflow has `contents: write` and `pull-requests: write` permissions.
+1. Ensure the workflow has `contents: write`, `pull-requests: write`, and `issues: write` permissions.
 2. Check that `create-pr` is not set to `false`.
 3. Verify the `github-token` has not expired.
 4. For fork PRs, the default `GITHUB_TOKEN` has read-only access. PRs cannot be created in this context.
+5. In your repository settings, go to **Settings > Actions > General** and enable **"Allow GitHub Actions to create and approve pull requests"** under **Workflow permissions**.
 
 ### Tests fail on generated patch
 

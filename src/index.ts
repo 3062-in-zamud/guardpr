@@ -29,12 +29,16 @@ import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/l
 const VERSION = "1.1.0";
 
 function parseActionInputs(): ActionInputs {
+  const rawThreshold = core.getInput("confidence-threshold");
+  const rawCreatePr = core.getInput("create-pr");
+  const rawRunTests = core.getInput("run-tests");
+  const rawTestCommand = core.getInput("test-command");
   return {
     configPath: core.getInput("config-path") || ".guardpr.yml",
-    confidenceThreshold: parseFloat(core.getInput("confidence-threshold") || "0.9"),
-    createPr: core.getInput("create-pr") !== "false",
-    runTests: core.getInput("run-tests") !== "false",
-    testCommand: core.getInput("test-command") || "npm test",
+    confidenceThreshold: rawThreshold ? parseFloat(rawThreshold) : undefined,
+    createPr: rawCreatePr ? rawCreatePr !== "false" : undefined,
+    runTests: rawRunTests ? rawRunTests !== "false" : undefined,
+    testCommand: rawTestCommand || undefined,
     scanners: core.getInput("scanners") || "all",
     githubToken: core.getInput("github-token"),
   };

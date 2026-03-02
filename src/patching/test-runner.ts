@@ -32,24 +32,24 @@ export class TestRunner {
           if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
           }
-        } else {
-          // For modify/create, apply the diff using git apply
-          const diffContent = change.diff;
-          if (diffContent) {
-            const tmpDiffFile = path.join(workDir, `.guardpr-patch-${Date.now()}.diff`);
-            fs.writeFileSync(tmpDiffFile, diffContent);
-            const applyResult = await execCommand("git", ["apply", "--allow-empty", tmpDiffFile], {
-              cwd: workDir,
-            });
-            fs.unlinkSync(tmpDiffFile);
-            if (applyResult.exitCode !== 0) {
-              warn(`Failed to apply diff for ${change.filePath}: ${applyResult.stderr}`);
-              return {
-                ...patch,
-                status: "tests-failed",
-                testOutput: `Failed to apply patch: ${applyResult.stderr}`,
-              };
-            }
+        } else if (change.modifiedContent !== undefined) {
+          // Direct file write — same as PR creation flow
+          fs.writeFileSync(filePath, change.modifiedContent);
+        } else if (change.diff) {
+          // Fallback to git apply for patches without modifiedContent
+          const tmpDiffFile = path.join(workDir, `.guardpr-patch-${Date.now()}.diff`);
+          fs.writeFileSync(tmpDiffFile, change.diff);
+          const applyResult = await execCommand("git", ["apply", "--allow-empty", tmpDiffFile], {
+            cwd: workDir,
+          });
+          fs.unlinkSync(tmpDiffFile);
+          if (applyResult.exitCode !== 0) {
+            warn(`Failed to apply diff for ${change.filePath}: ${applyResult.stderr}`);
+            return {
+              ...patch,
+              status: "tests-failed",
+              testOutput: `Failed to apply patch: ${applyResult.stderr}`,
+            };
           }
         }
       }

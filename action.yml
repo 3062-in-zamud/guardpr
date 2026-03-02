@@ -12,21 +12,17 @@ inputs:
     required: false
     default: ".guardpr.yml"
   confidence-threshold:
-    description: "Minimum confidence score to generate a fix PR (0.0 - 1.0)"
+    description: "Minimum confidence score to generate a fix PR (0.0 - 1.0). Default: 0.9"
     required: false
-    default: "0.9"
   create-pr:
-    description: "Whether to create a draft PR for fixes"
+    description: "Whether to create a draft PR for fixes. Default: true"
     required: false
-    default: "true"
   run-tests:
-    description: "Whether to run tests after applying patches"
+    description: "Whether to run tests after applying patches. Default: true"
     required: false
-    default: "true"
   test-command:
-    description: "Custom test command to run after applying patches"
+    description: "Custom test command to run after applying patches. Default: npm test"
     required: false
-    default: "npm test"
   scanners:
     description: "Comma-separated list of scanners to run (default: all)"
     required: false

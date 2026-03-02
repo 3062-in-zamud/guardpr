@@ -10,10 +10,10 @@ import { guardprYamlSchema } from "./schema";
 
 export interface ActionInputs {
   configPath: string;
-  confidenceThreshold: number;
-  createPr: boolean;
-  runTests: boolean;
-  testCommand: string;
+  confidenceThreshold?: number;
+  createPr?: boolean;
+  runTests?: boolean;
+  testCommand?: string;
   scanners: string;
   githubToken: string;
 }
@@ -77,10 +77,13 @@ export async function loadConfig(
     ...DEFAULT_CONFIG,
     ...yamlConfig,
     configPath: actionInputs.configPath,
-    confidenceThreshold: actionInputs.confidenceThreshold,
-    createPr: actionInputs.createPr,
-    runTests: actionInputs.runTests,
-    testCommand: actionInputs.testCommand,
+    confidenceThreshold:
+      actionInputs.confidenceThreshold ??
+      yamlConfig.confidenceThreshold ??
+      DEFAULT_CONFIG.confidenceThreshold,
+    createPr: actionInputs.createPr ?? yamlConfig.createPr ?? DEFAULT_CONFIG.createPr,
+    runTests: actionInputs.runTests ?? yamlConfig.runTests ?? DEFAULT_CONFIG.runTests,
+    testCommand: actionInputs.testCommand ?? yamlConfig.testCommand ?? DEFAULT_CONFIG.testCommand,
     githubToken: actionInputs.githubToken,
     scanners: {
       ...DEFAULT_CONFIG.scanners,
