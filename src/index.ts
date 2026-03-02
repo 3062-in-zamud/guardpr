@@ -1,4 +1,6 @@
 import * as core from "@actions/core";
+import * as fs from "fs";
+import * as path from "path";
 
 import { AuditLogger } from "./audit/logger";
 import { ArtifactUploader } from "./audit/artifact-uploader";
@@ -20,6 +22,7 @@ import { filterByThreshold } from "./scoring/threshold-filter";
 import { Finding, GuardPRError, Patch, ScanResult } from "./types";
 import { MaskingLayer as RunnerMaskingLayer } from "./utils/masking";
 import { getContext } from "./utils/github";
+import { execCommand } from "./utils/exec";
 import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/logger";
 
 const VERSION = "0.1.0";
@@ -257,7 +260,32 @@ async function run(): Promise<void> {
       endGroup();
     }
 
-    // 12. Create PR
+    // 12. Apply patches to working directory for PR creation
+    if (patches.length > 0) {
+      const applicablePatches = patches.filter(
+        (p) =>
+          p.type === "auto-fix" &&
+          p.status !== "generation-failed" &&
+          p.status !== "tests-failed",
+      );
+      for (const patch of applicablePatches) {
+        for (const change of patch.fileChanges) {
+          if (change.diff) {
+            const tmpFile = path.join(workDir, `.guardpr-apply-${Date.now()}.diff`);
+            fs.writeFileSync(tmpFile, change.diff);
+            const result = await execCommand("git", ["apply", "--allow-empty", tmpFile], {
+              cwd: workDir,
+            });
+            fs.unlinkSync(tmpFile);
+            if (result.exitCode !== 0) {
+              warn(`Failed to apply patch for PR: ${change.filePath}: ${result.stderr}`);
+            }
+          }
+        }
+      }
+    }
+
+    // 13. Create PR
     let prUrl: string | undefined;
     let prNumber: number | undefined;
     let prCreated = false;
