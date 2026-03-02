@@ -103,6 +103,7 @@ export class XssSanitizationStrategy {
           filePath,
           diff,
           changeType: "modify",
+          modifiedContent,
         },
       ],
       status: "pending",

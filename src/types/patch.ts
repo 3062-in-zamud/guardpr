@@ -2,6 +2,7 @@ export interface FileChange {
   filePath: string;
   diff: string;
   changeType: "create" | "modify" | "delete";
+  modifiedContent?: string;
 }
 
 export type PatchType = "auto-fix" | "notification-only";

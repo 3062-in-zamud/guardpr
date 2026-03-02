@@ -268,9 +268,21 @@ async function run(): Promise<void> {
           p.status !== "generation-failed" &&
           p.status !== "tests-failed",
       );
+      const appliedFiles = new Set<string>();
       for (const patch of applicablePatches) {
         for (const change of patch.fileChanges) {
-          if (change.diff) {
+          // Skip files already modified by a previous patch
+          if (appliedFiles.has(change.filePath)) {
+            continue;
+          }
+          const fullPath = path.join(workDir, change.filePath);
+          if (change.modifiedContent !== undefined) {
+            // Direct file write — reliable, no git apply issues
+            fs.writeFileSync(fullPath, change.modifiedContent);
+            appliedFiles.add(change.filePath);
+            info(`Applied patch to ${change.filePath}`);
+          } else if (change.diff) {
+            // Fallback to git apply for patches without modifiedContent
             const tmpFile = path.join(workDir, `.guardpr-apply-${Date.now()}.diff`);
             fs.writeFileSync(tmpFile, change.diff);
             const result = await execCommand("git", ["apply", "--allow-empty", tmpFile], {
@@ -279,10 +291,14 @@ async function run(): Promise<void> {
             fs.unlinkSync(tmpFile);
             if (result.exitCode !== 0) {
               warn(`Failed to apply patch for PR: ${change.filePath}: ${result.stderr}`);
+            } else {
+              appliedFiles.add(change.filePath);
+              info(`Applied diff patch to ${change.filePath}`);
             }
           }
         }
       }
+      info(`Applied patches to ${appliedFiles.size} file(s)`);
     }
 
     // 13. Create PR
