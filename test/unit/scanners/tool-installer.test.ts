@@ -15,6 +15,7 @@ vi.mock("os", async () => {
   };
 });
 
+import { GuardPRError } from "../../../src/types";
 import { getPlatformKey, verifyChecksum } from "../../../src/scanners/tool-installer";
 
 describe("tool-installer", () => {
@@ -86,8 +87,11 @@ describe("tool-installer", () => {
 
       try {
         await verifyChecksum(filePath, wrongHash);
-      } catch (err: any) {
-        expect(err.code).toBe("CHECKSUM_MISMATCH");
+      } catch (err: unknown) {
+        expect(err).toBeInstanceOf(GuardPRError);
+        if (err instanceof GuardPRError) {
+          expect(err.code).toBe("CHECKSUM_MISMATCH");
+        }
       }
     });
 

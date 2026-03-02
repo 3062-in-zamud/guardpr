@@ -1,6 +1,6 @@
 {
   "name": "guardpr",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "private": true,
   "description": "Automated security vulnerability detection and fix PR generation for GitHub repositories",
   "main": "dist/index.js",

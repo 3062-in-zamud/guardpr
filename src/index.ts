@@ -26,7 +26,7 @@ import { getContext } from "./utils/github";
 import { execCommand } from "./utils/exec";
 import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/logger";
 
-const VERSION = "1.0.0-beta.1";
+const VERSION = "1.0.0";
 
 function parseActionInputs(): ActionInputs {
   return {

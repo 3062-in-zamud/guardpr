@@ -89,7 +89,7 @@ describe("gitleaks parser", () => {
       const findings = parseGitleaksOutput(fixtureJson);
       const finding = findings[0]!;
       expect(finding.rawData).toBeDefined();
-      expect((finding.rawData as any).RuleID).toBe("aws-access-key-id");
+      expect(finding.rawData?.["RuleID"]).toBe("aws-access-key-id");
     });
   });
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import * as github from "@actions/github";
 
 import {
@@ -7,6 +7,13 @@ import {
   addLabel,
   getContext,
 } from "../../../src/utils/github";
+
+interface MockOctokit {
+  rest: {
+    pulls: { create: Mock; list: Mock };
+    issues: { addLabels: Mock; createLabel: Mock };
+  };
+}
 
 vi.mock("@actions/github", () => {
   const mockOctokit = {
@@ -35,8 +42,8 @@ vi.mock("@actions/github", () => {
   };
 });
 
-function getMockOctokit() {
-  return (github.getOctokit as ReturnType<typeof vi.fn>)("fake") as any;
+function getMockOctokit(): MockOctokit {
+  return (github.getOctokit as Mock)("fake") as MockOctokit;
 }
 
 beforeEach(() => {
@@ -54,7 +61,7 @@ beforeEach(() => {
       },
     },
   };
-  vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as any);
+  vi.mocked(github.getOctokit).mockReturnValue(mockOctokit as MockOctokit);
 });
 
 describe("createDraftPR", () => {

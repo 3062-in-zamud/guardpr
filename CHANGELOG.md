@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.0] - 2026-03-02
+
+### Changed
+- Promoted to stable release (no functional changes from beta.1)
+
+### Fixed
+- Fixed lint warnings in test files
+- Synced package version with release tag
+
 ## [1.0.0-beta.1] - 2026-03-02
 
 ### Added

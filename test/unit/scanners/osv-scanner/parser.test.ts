@@ -117,7 +117,7 @@ describe("osv-scanner parser", () => {
       const findings = parseOsvOutput(fixtureJson);
       const finding = findings[0]!;
       expect(finding.rawData).toBeDefined();
-      expect((finding.rawData as any).id).toBeDefined();
+      expect(finding.rawData?.["id"]).toBeDefined();
     });
   });
 });
