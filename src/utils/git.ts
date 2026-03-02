@@ -1,4 +1,5 @@
 import { execCommand } from "./exec";
+import { info, warn } from "./logger";
 
 export async function getCurrentSha(): Promise<string> {
   const result = await execCommand("git", ["rev-parse", "HEAD"]);
@@ -19,8 +20,23 @@ export async function checkoutBranch(name: string): Promise<void> {
 }
 
 export async function commitAll(message: string): Promise<void> {
-  await execCommand("git", ["add", "-A"]);
-  await execCommand("git", ["commit", "-m", message]);
+  // Configure git user for CI environments
+  await execCommand("git", ["config", "user.name", "guardpr[bot]"]);
+  await execCommand("git", ["config", "user.email", "guardpr[bot]@users.noreply.github.com"]);
+
+  const addResult = await execCommand("git", ["add", "-A"]);
+  if (addResult.exitCode !== 0) {
+    warn(`git add failed: ${addResult.stderr}`);
+  }
+
+  // Check if there are staged changes
+  const statusResult = await execCommand("git", ["status", "--porcelain"]);
+  info(`git status: ${statusResult.stdout.trim() || "(no changes)"}`);
+
+  const commitResult = await execCommand("git", ["commit", "-m", message]);
+  if (commitResult.exitCode !== 0) {
+    warn(`git commit failed: ${commitResult.stderr || commitResult.stdout}`);
+  }
 }
 
 export async function pushBranch(name: string, token: string): Promise<void> {
