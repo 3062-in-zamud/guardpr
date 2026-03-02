@@ -29,7 +29,7 @@ Key reasons:
 
 - No automated changes reach production without human approval.
 - Works with all branch protection configurations, including required reviews and status checks.
-- The `guardpr` label on PRs enables KPI tracking (PR acceptance rate, effective fix rate).
+- The `guardpr` label on PRs enables tracking and filtering of automated fix PRs.
 - Draft status prevents premature merging by automation.
 
 **Negative:**
