@@ -78,8 +78,10 @@ export class TestRunner {
         testOutput: `Test execution error: ${err instanceof Error ? err.message : String(err)}`,
       };
     } finally {
-      // Clean up: restore original branch and delete temp
+      // Clean up: discard working tree changes, restore original branch, delete temp
       try {
+        await execCommand("git", ["checkout", "--", "."], { cwd: workDir });
+        await execCommand("git", ["clean", "-fd"], { cwd: workDir });
         await execCommand("git", ["checkout", originalBranch], { cwd: workDir });
         await execCommand("git", ["branch", "-D", tempBranch], { cwd: workDir });
       } catch {
