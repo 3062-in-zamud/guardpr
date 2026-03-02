@@ -14,3 +14,6 @@ dist/*
 # AI agent working files
 .claude/
 **/CLAUDE.md
+
+# Browser automation
+.playwright-mcp/
