@@ -27,8 +27,9 @@ import { execCommand } from "./utils/exec";
 import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/logger";
 import { buildWebhookPayload } from "./webhook/payload";
 import { sendWebhook } from "./webhook/sender";
+import { runOnboarding } from "./onboarding/welcome-issue";
 
-const VERSION = "1.1.0";
+const VERSION = "0.3.0";
 
 function parseActionInputs(): ActionInputs {
   const rawThreshold = core.getInput("confidence-threshold");
@@ -77,6 +78,11 @@ function buildStepSummary(
   lines.push(`| Tests passed | ${passed} |`);
   lines.push(`| Tests failed | ${failed} |`);
   lines.push("");
+
+  if (highConfidence.length === 0 && lowConfidence.length === 0) {
+    lines.push("\n✅ **Your codebase passed all 4 security checks!**\n");
+    lines.push("No vulnerabilities detected. GuardPR will continue monitoring on future pushes.\n");
+  }
 
   if (prUrl !== undefined) {
     lines.push(`**Draft PR**: ${prUrl}\n`);
@@ -385,6 +391,17 @@ async function run(): Promise<void> {
       warn(`Failed to upload audit artifact: ${err instanceof Error ? err.message : String(err)}`);
     }
     endGroup();
+
+    // 15.5 First-run onboarding
+    const onboardingCtx = getContext();
+    await runOnboarding({
+      owner: onboardingCtx.owner,
+      repo: onboardingCtx.repo,
+      token: config.githubToken,
+      findings: { high: highConfidence, low: lowConfidence },
+      prUrl,
+      version: VERSION,
+    });
 
     // 16. Pro Webhook
     if (config.pro.apiKey !== "" && config.pro.endpoint !== "") {

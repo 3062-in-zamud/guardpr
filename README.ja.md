@@ -1,5 +1,6 @@
 <p align="center">
-  <h1 align="center">GuardPR</h1>
+  <img src="docs/images/logo.png" alt="GuardPR" width="480">
+  <br>
   <p align="center">GitHub リポジトリのセキュリティ脆弱性を自動検出し、修正 PR を生成する GitHub Action</p>
   <p align="center">
     <a href="https://github.com/3062-in-zamud/guardpr/actions"><img src="https://github.com/3062-in-zamud/guardpr/workflows/CI/badge.svg" alt="CI"></a>
@@ -74,6 +75,18 @@ jobs:
 すべての検出結果に**信頼度スコア**が付与されます。設定した閾値（デフォルト: 0.9）以上の検出結果のみが修正 PR を生成します。
 
 `シークレット` と `依存関係` スキャナーは言語非依存です。特定言語のASTではなく、ファイル内容と各エコシステムのロックファイルを解析します。
+
+### 言語エコシステムサポート
+
+| スキャナー | 対応範囲 | 詳細 |
+|-----------|---------|------|
+| **シークレット**（Gitleaks） | 全言語・全ファイル ✅ | パターンマッチング。言語を問わず API キー・トークン・秘密鍵を検出 |
+| **依存関係**（OSV-Scanner） | 9エコシステム ✅ | npm / yarn / pnpm / Gemfile / poetry / go.sum / Cargo / Composer / requirements.txt |
+| **XSS** | JS / TS のみ | `.ts`, `.tsx`, `.js`, `.jsx` — AST ベース解析 |
+| **認可** | Express / Next.js のみ | フレームワーク固有のミドルウェア検出 |
+
+Gitleaks のシークレットパターン一覧は [Gitleaks デフォルトルール](https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml) を参照してください。
+OSV-Scanner の対応ロックファイル形式は [OSV-Scanner ドキュメント](https://google.github.io/osv-scanner/supported-languages-and-lockfiles/) を参照してください。
 
 ## Community vs Pro
 
@@ -207,6 +220,12 @@ permissions:
 | [アーキテクチャ](docs/architecture.md) | システム設計、パイプラインデータフロー、コンポーネント図 |
 | [セキュリティポリシー](SECURITY.md) | 脆弱性報告、セキュリティ設計、権限モデル |
 | [ADR](docs/adr/) | アーキテクチャ決定記録 |
+
+## コミュニティ
+
+- [GitHub Discussions](https://github.com/3062-in-zamud/guardpr/discussions) -- 質問・機能リクエスト・事例共有
+- [バグ報告](https://github.com/3062-in-zamud/guardpr/issues/new?template=bug_report.yml) -- 動作がおかしい場合
+- [誤検出の報告](https://github.com/3062-in-zamud/guardpr/issues/new?template=false-positive-report.yml) -- 検出精度の改善にご協力ください
 
 ## コントリビューション
 

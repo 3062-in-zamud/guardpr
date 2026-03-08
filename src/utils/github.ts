@@ -101,6 +101,63 @@ export async function addLabel(
   }
 }
 
+export interface CreateIssueParams {
+  owner: string;
+  repo: string;
+  title: string;
+  body: string;
+  labels?: string[];
+  token: string;
+}
+
+export async function hasOnboardingLabel(
+  owner: string,
+  repo: string,
+  token: string,
+): Promise<boolean> {
+  const octokit = getOctokit(token);
+  try {
+    await octokit.rest.issues.getLabel({
+      owner,
+      repo,
+      name: "guardpr-onboarded",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function createIssue(
+  params: CreateIssueParams,
+): Promise<{ url: string; number: number }> {
+  const octokit = getOctokit(params.token);
+  const response = await octokit.rest.issues.create({
+    owner: params.owner,
+    repo: params.repo,
+    title: params.title,
+    body: params.body,
+    labels: params.labels,
+  });
+  return { url: response.data.html_url, number: response.data.number };
+}
+
+export async function ensureLabelExists(
+  owner: string,
+  repo: string,
+  name: string,
+  color: string,
+  description: string,
+  token: string,
+): Promise<void> {
+  const octokit = getOctokit(token);
+  try {
+    await octokit.rest.issues.getLabel({ owner, repo, name });
+  } catch {
+    await octokit.rest.issues.createLabel({ owner, repo, name, color, description });
+  }
+}
+
 export interface GitHubContext {
   owner: string;
   repo: string;

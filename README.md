@@ -1,5 +1,6 @@
 <p align="center">
-  <h1 align="center">GuardPR</h1>
+  <img src="docs/images/logo.png" alt="GuardPR" width="480">
+  <br>
   <p align="center">Automated security vulnerability detection and fix PR generation for GitHub repositories</p>
   <p align="center">
     <a href="https://github.com/3062-in-zamud/guardpr/actions"><img src="https://github.com/3062-in-zamud/guardpr/workflows/CI/badge.svg" alt="CI"></a>
@@ -74,6 +75,18 @@ jobs:
 Every finding includes a **confidence score**. Only findings above the configured threshold (default: 0.9) produce fix PRs.
 
 `Secrets` and `Dependencies` scanners are language-agnostic: they inspect file content and lockfiles across ecosystems, not a single programming language parser.
+
+### Language Ecosystem Support
+
+| Scanner | Scope | Details |
+|---------|-------|---------|
+| **Secrets** (Gitleaks) | All languages & file types ✅ | Pattern-based detection; finds API keys, tokens, private keys in any file regardless of language |
+| **Dependencies** (OSV-Scanner) | 9 ecosystems ✅ | npm / yarn / pnpm / Gemfile / poetry / go.sum / Cargo / Composer / requirements.txt |
+| **XSS** | JS / TS only | `.ts`, `.tsx`, `.js`, `.jsx` — AST-based analysis |
+| **Authorization** | Express / Next.js only | Framework-specific middleware detection |
+
+For the full list of Gitleaks secret patterns, see the [Gitleaks default rules](https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml).
+For all OSV-Scanner supported lockfile formats, see the [OSV-Scanner documentation](https://google.github.io/osv-scanner/supported-languages-and-lockfiles/).
 
 ## Community vs Pro
 
@@ -207,6 +220,12 @@ permissions:
 | [Architecture](docs/architecture.md) | System design, pipeline data flow, component diagram |
 | [Security Policy](SECURITY.md) | Vulnerability reporting, security design, permissions model |
 | [ADRs](docs/adr/) | Architecture Decision Records |
+
+## Community
+
+- [GitHub Discussions](https://github.com/3062-in-zamud/guardpr/discussions) -- Questions, feature requests, and show & tell
+- [Report a Bug](https://github.com/3062-in-zamud/guardpr/issues/new?template=bug_report.yml) -- Found something broken?
+- [Report False Positives](https://github.com/3062-in-zamud/guardpr/issues/new?template=false-positive-report.yml) -- Help improve detection accuracy
 
 ## Contributing
 

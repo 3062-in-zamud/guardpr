@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-03-08
+
+### Added
+- Onboarding welcome issue: first-run detection via `guardpr-onboarded` label, auto-creates a welcome issue with scan results summary, next steps checklist, and documentation links
+- `hasOnboardingLabel()`, `createIssue()`, `ensureLabelExists()`, `addLabel()` utility functions in `src/utils/github.ts`
+- Clean scan message in step summary when no vulnerabilities are detected
+- Language Ecosystem Support table in README
+
+### Fixed
+- VERSION constant corrected to match release tag (was `1.1.0`, now `0.3.0`)
+
+### Community
+- Community section added to README with links to Discussions, bug reports, and false positive reports
+
 ## [1.1.0] - 2026-03-02
 
 ### Changed
