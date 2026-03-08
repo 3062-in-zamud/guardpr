@@ -15,7 +15,7 @@
 
 ## What is GuardPR?
 
-GuardPR is a GitHub Action that automatically detects security vulnerabilities, generates fix patches, validates them with tests, and opens draft PRs -- all in a single workflow run. No external services, no data leaving your runner.
+GuardPR is a GitHub Action that automatically detects security vulnerabilities, generates fix patches, validates them with tests, and opens draft PRs -- all in a single workflow run. In Community mode, no code or findings leave your runner. Pro mode is explicit opt-in and sends aggregate statistics only.
 
 ## Demo
 
@@ -73,9 +73,26 @@ jobs:
 
 Every finding includes a **confidence score**. Only findings above the configured threshold (default: 0.9) produce fix PRs.
 
+`Secrets` and `Dependencies` scanners are language-agnostic: they inspect file content and lockfiles across ecosystems, not a single programming language parser.
+
 ## Community vs Pro
 
-All core features are free and open source. A Pro tier with additional capabilities is planned -- details will be announced separately.
+All core features are free and open source.
+
+| | Community | Pro |
+|---|---|---|
+| Secret detection | Yes | Yes |
+| Dependency scanning | Yes | Yes |
+| XSS detection | Yes | Yes |
+| Authorization scanning | Yes | Yes |
+| Auto-fix PRs | Yes | Yes |
+| Audit log artifacts | Yes | Yes |
+| Dashboard & analytics | -- | Planned |
+| Custom detection rules | -- | Planned |
+| Slack/Teams notifications | -- | Planned |
+| Priority support | -- | Planned |
+
+Pro integration is opt-in via the `pro-api-key` action input. Community users are unaffected -- no data leaves your runner. See [ADR-009](docs/adr/009-pro-opt-in-telemetry.md) for the privacy design.
 
 ## Configuration
 
@@ -90,6 +107,7 @@ All core features are free and open source. A Pro tier with additional capabilit
 | `run-tests` | No | `true` | Run tests after applying patches |
 | `test-command` | No | `npm test` | Test command to run |
 | `scanners` | No | `all` | Comma-separated list of scanners |
+| `pro-api-key` | No | -- | Pro API key for dashboard integration (use GitHub Secrets) |
 
 ### Outputs
 
@@ -154,11 +172,11 @@ See [docs/configuration.md](docs/configuration.md) for the full configuration re
 5. PR         Open draft PR with description, checklist, and audit trail
 ```
 
-All processing happens on the GitHub Actions runner. No code or findings leave your environment. See [docs/architecture.md](docs/architecture.md) for the full pipeline details.
+All processing happens on the GitHub Actions runner. In Community mode, no code or findings leave your environment. In Pro mode, only aggregate statistics are sent when `pro-api-key` is configured. See [docs/architecture.md](docs/architecture.md) for the full pipeline details.
 
 ## Security & Privacy
 
-- **No external data transmission**: All processing occurs on the Actions runner. Only OSV-Scanner queries OSV.dev with package names (no source code).
+- **Community mode has no external telemetry**: All processing occurs on the Actions runner. Only OSV-Scanner queries OSV.dev with package names (no source code). Pro mode sends aggregate statistics only when explicitly enabled with `pro-api-key`.
 - **5-layer secret defense**: Detection, runtime masking, patch suppression, audit log redaction, PR description redaction.
 - **Binary integrity**: Scanner binaries verified via SHA-256 checksum before execution.
 - **Minimal permissions**: Only `contents: write`, `pull-requests: write`, and `actions: read`.

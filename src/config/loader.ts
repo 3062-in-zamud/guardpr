@@ -16,6 +16,7 @@ export interface ActionInputs {
   testCommand?: string;
   scanners: string;
   githubToken: string;
+  proApiKey?: string;
 }
 
 function parseScannerOverrides(
@@ -92,6 +93,10 @@ export async function loadConfig(
     patching: {
       ...DEFAULT_CONFIG.patching,
       ...(yamlConfig.patching ?? {}),
+    },
+    pro: {
+      apiKey: actionInputs.proApiKey ?? "",
+      endpoint: DEFAULT_CONFIG.pro.endpoint,
     },
   };
 

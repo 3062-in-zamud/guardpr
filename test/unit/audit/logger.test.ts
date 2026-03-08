@@ -78,6 +78,7 @@ const defaultConfig: GuardPRConfig = {
   },
   patching: { maxLinesPerPatch: 50, maxFilesPerPatch: 5 },
   githubToken: "ghp_secret_token_value",
+  pro: { apiKey: "pro_secret_key_value", endpoint: "https://api.guardpr.dev/webhook" },
 };
 
 describe("AuditLogger", () => {
@@ -141,6 +142,11 @@ describe("AuditLogger", () => {
 
     expect(log.config["githubToken"]).toBe("***");
     expect(log.config["githubToken"]).not.toBe("ghp_secret_token_value");
+
+    const proConfig = log.config["pro"] as { apiKey: string; endpoint: string };
+    expect(proConfig.apiKey).toBe("***");
+    expect(proConfig.apiKey).not.toBe("pro_secret_key_value");
+    expect(proConfig.endpoint).toBe("https://api.guardpr.dev/webhook");
   });
 
   it("generates a valid SHA-256 checksum", () => {

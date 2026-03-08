@@ -1,0 +1,85 @@
+name: False Positive Report
+description: Report a false positive finding from GuardPR
+title: "[FP]: "
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a false positive! Your feedback helps us improve detection accuracy.
+
+  - type: dropdown
+    id: scanner
+    attributes:
+      label: Scanner
+      description: Which scanner produced the false positive?
+      options:
+        - Secrets (Gitleaks)
+        - Dependencies (OSV-Scanner)
+        - XSS (built-in)
+        - Authorization (built-in)
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: GuardPR Version
+      description: Which version of GuardPR are you using?
+      placeholder: "e.g., v1.1.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: finding
+    attributes:
+      label: Reported Finding
+      description: Copy the finding output from the GuardPR scan result or PR body
+      placeholder: |
+        Paste the finding details here, e.g.:
+        - File: src/config.ts
+        - Line: 42
+        - Rule: generic-api-key
+        - Message: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: justification
+    attributes:
+      label: Why is this a false positive?
+      description: Explain why this finding is incorrect
+      placeholder: |
+        e.g., "This is a test fixture / placeholder value, not a real secret."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the false positive
+      placeholder: |
+        1. Create a file with the following content...
+        2. Run GuardPR with scanners: "..."
+        3. Observe the finding in the PR body...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Action Logs
+      description: Relevant log output from the GitHub Actions run (redact any secrets)
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: config
+    attributes:
+      label: .guardpr.yml
+      description: Your GuardPR configuration file (if customized)
+      render: yaml
+    validations:
+      required: false

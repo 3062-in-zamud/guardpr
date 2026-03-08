@@ -1,0 +1,15 @@
+title: "[Announcement]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share project updates, new releases, and important news with the GuardPR community.
+
+  - type: textarea
+    id: announcement
+    attributes:
+      label: Announcement
+      description: What would you like to announce?
+    validations:
+      required: true

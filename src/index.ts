@@ -25,6 +25,8 @@ import { MaskingLayer as RunnerMaskingLayer } from "./utils/masking";
 import { getContext } from "./utils/github";
 import { execCommand } from "./utils/exec";
 import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/logger";
+import { buildWebhookPayload } from "./webhook/payload";
+import { sendWebhook } from "./webhook/sender";
 
 const VERSION = "1.1.0";
 
@@ -41,6 +43,7 @@ function parseActionInputs(): ActionInputs {
     testCommand: rawTestCommand || undefined,
     scanners: core.getInput("scanners") || "all",
     githubToken: core.getInput("github-token"),
+    proApiKey: core.getInput("pro-api-key") || undefined,
   };
 }
 
@@ -383,7 +386,39 @@ async function run(): Promise<void> {
     }
     endGroup();
 
-    // 16. Set action outputs
+    // 16. Pro Webhook
+    if (config.pro.apiKey !== "" && config.pro.endpoint !== "") {
+      startGroup("Pro Webhook");
+      try {
+        const webhookCtx = getContext();
+        const payload = buildWebhookPayload({
+          version: VERSION,
+          repository: `${webhookCtx.owner}/${webhookCtx.repo}`,
+          run: {
+            id: webhookCtx.runId,
+            sha: webhookCtx.sha,
+            ref: webhookCtx.ref,
+            actor: webhookCtx.actor,
+            eventName: webhookCtx.eventName,
+          },
+          highConfidence,
+          lowConfidence,
+          scanResults,
+          patches,
+          prCreated,
+          prUrl,
+          prNumber,
+          totalDurationMs: Date.now() - startTime,
+        });
+        await sendWebhook({ apiKey: config.pro.apiKey, endpoint: config.pro.endpoint, payload });
+        info("Pro webhook sent successfully");
+      } catch (err) {
+        warn(`Pro webhook failed (non-fatal): ${err instanceof Error ? err.message : String(err)}`);
+      }
+      endGroup();
+    }
+
+    // 17. Set action outputs
     core.setOutput("findings-count", String(scoredFindings.length));
     core.setOutput("high-confidence-count", String(highConfidence.length));
     core.setOutput("low-confidence-count", String(lowConfidence.length));

@@ -149,4 +149,65 @@ confidenceThreshold: "not-a-number"
     expect(config.patching.maxLinesPerPatch).toBe(DEFAULT_CONFIG.patching.maxLinesPerPatch);
     expect(config.patching.maxFilesPerPatch).toBe(DEFAULT_CONFIG.patching.maxFilesPerPatch);
   });
+
+  it("sets pro.apiKey from action input", async () => {
+    const err = new Error("ENOENT") as NodeJS.ErrnoException;
+    err.code = "ENOENT";
+    vi.mocked(fs.readFileSync).mockImplementation(() => {
+      throw err;
+    });
+
+    const config = await loadConfig(".guardpr.yml", {
+      ...baseActionInputs,
+      proApiKey: "pro_test_key_123",
+    });
+
+    expect(config.pro.apiKey).toBe("pro_test_key_123");
+    expect(config.pro.endpoint).toBe(DEFAULT_CONFIG.pro.endpoint);
+  });
+
+  it("defaults pro.apiKey to empty string when not provided", async () => {
+    const err = new Error("ENOENT") as NodeJS.ErrnoException;
+    err.code = "ENOENT";
+    vi.mocked(fs.readFileSync).mockImplementation(() => {
+      throw err;
+    });
+
+    const config = await loadConfig(".guardpr.yml", baseActionInputs);
+
+    expect(config.pro.apiKey).toBe("");
+    expect(config.pro.endpoint).toBe(DEFAULT_CONFIG.pro.endpoint);
+  });
+
+  it("ignores pro settings in YAML config (security: apiKey must come from action input)", async () => {
+    const yamlContent = `
+pro:
+  apiKey: "leaked-key-in-yaml"
+  endpoint: "https://evil.example.com/webhook"
+`;
+    vi.mocked(fs.readFileSync).mockReturnValue(yamlContent);
+
+    const config = await loadConfig(".guardpr.yml", baseActionInputs);
+
+    // apiKey should be empty (from action input default), not from YAML
+    expect(config.pro.apiKey).toBe("");
+    // endpoint should be the hardcoded default, not from YAML
+    expect(config.pro.endpoint).toBe(DEFAULT_CONFIG.pro.endpoint);
+  });
+
+  it("uses fixed endpoint regardless of action input", async () => {
+    const err = new Error("ENOENT") as NodeJS.ErrnoException;
+    err.code = "ENOENT";
+    vi.mocked(fs.readFileSync).mockImplementation(() => {
+      throw err;
+    });
+
+    const config = await loadConfig(".guardpr.yml", {
+      ...baseActionInputs,
+      proApiKey: "pro_key",
+    });
+
+    // endpoint is always the default, never overridden
+    expect(config.pro.endpoint).toBe(DEFAULT_CONFIG.pro.endpoint);
+  });
 });

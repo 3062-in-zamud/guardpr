@@ -1,0 +1,12 @@
+{
+  "name": "vulnerable-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "lodash": "4.17.20",
+    "express": "4.17.1",
+    "json5": "2.2.1",
+    "minimatch": "3.0.4",
+    "qs": "6.5.2"
+  }
+}

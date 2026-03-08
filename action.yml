@@ -30,6 +30,9 @@ inputs:
   github-token:
     description: "GitHub token for API access"
     required: true
+  pro-api-key:
+    description: "GuardPR Pro API key for dashboard integration (optional, use GitHub Secrets)"
+    required: false
 
 outputs:
   findings-count:

@@ -36,6 +36,11 @@ export interface PatchingConfig {
   maxFilesPerPatch: number;
 }
 
+export interface ProConfig {
+  apiKey: string;
+  endpoint: string;
+}
+
 export interface GuardPRConfig {
   configPath: string;
   confidenceThreshold: number;
@@ -45,4 +50,5 @@ export interface GuardPRConfig {
   scanners: ScannersConfig;
   patching: PatchingConfig;
   githubToken: string;
+  pro: ProConfig;
 }

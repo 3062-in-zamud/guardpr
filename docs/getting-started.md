@@ -83,6 +83,15 @@ scanners:
     enabled: false   # Disable auth scanning
 ```
 
+### Language coverage for Secrets and Dependencies
+
+`secrets` and `dependencies` scanners are language-agnostic:
+
+- `secrets` scans file content patterns across all file types (via Gitleaks).
+- `dependencies` scans lockfiles and manifests across ecosystems (`npm`, `yarn`, `pnpm`, `bundler`, `poetry`, `go`, `cargo`, `composer`, `pip`).
+
+This means you can use GuardPR in mixed-language repositories without per-language scanner setup for these two categories.
+
 ### Configure authorization scanner
 
 Define which routes require auth and what middleware to look for:
@@ -155,7 +164,7 @@ The action could not download a scanner binary. This is usually a transient netw
 ### No findings but expected some
 
 1. Check that the relevant scanner is enabled in `.guardpr.yml`.
-2. Verify the file types are supported (`.ts`, `.tsx`, `.js`, `.jsx` for XSS; lockfiles for dependencies).
+2. Verify the relevant inputs exist (`.ts/.tsx/.js/.jsx` for XSS, lockfiles/manifests for dependencies, any file content for secrets).
 3. Download the audit log artifact to see if findings were generated but filtered by the confidence threshold.
 4. Try lowering `confidenceThreshold` to `0.7` temporarily to see all findings.
 

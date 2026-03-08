@@ -1,5 +1,7 @@
 import { GuardPRConfig } from "../types/config";
 
+export const GUARDPR_PRO_WEBHOOK_ENDPOINT = "https://api.guardpr.dev/webhook";
+
 export const DEFAULT_CONFIG: GuardPRConfig = {
   configPath: ".guardpr.yml",
   confidenceThreshold: 0.9,
@@ -30,4 +32,8 @@ export const DEFAULT_CONFIG: GuardPRConfig = {
     maxFilesPerPatch: 5,
   },
   githubToken: "",
+  pro: {
+    apiKey: "",
+    endpoint: GUARDPR_PRO_WEBHOOK_ENDPOINT,
+  },
 };

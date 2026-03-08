@@ -19,6 +19,7 @@ export type {
   DependencyScannerConfig,
   ScannersConfig,
   PatchingConfig,
+  ProConfig,
   GuardPRConfig,
 } from "./config";
 

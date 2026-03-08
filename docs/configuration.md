@@ -208,6 +208,31 @@ patching:
   maxFilesPerPatch: 10
 ```
 
+## Pro Configuration
+
+GuardPR Pro provides a centralized dashboard for aggregated security insights. Pro is entirely opt-in and configured via action inputs only.
+
+### `pro-api-key`
+
+- **Type**: `string` (action input only)
+- **Default**: `""` (empty -- Community mode)
+
+Your GuardPR Pro API key. When set, GuardPR sends **aggregate statistics only** (finding counts, severity distribution, scanner durations) to the Pro dashboard after each scan. No source code, vulnerability descriptions, patch diffs, or secrets are transmitted.
+
+**Important:** Always use GitHub Secrets to store the API key. Never put it in `.guardpr.yml`.
+
+```yaml
+# In your workflow file:
+- uses: 3062-in-zamud/guardpr@v1
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    pro-api-key: ${{ secrets.GUARDPR_PRO_API_KEY }}
+```
+
+The Pro endpoint URL is hardcoded and cannot be changed by users (SSRF prevention). If `pro-api-key` is not set, no data is sent externally -- identical to previous versions.
+
+See [ADR-009](adr/009-pro-opt-in-telemetry.md) for the full privacy design.
+
 ## Action Inputs vs .guardpr.yml
 
 Some settings can be configured in both the workflow file (as action inputs) and in `.guardpr.yml`. When both are present, the following rules apply:
@@ -221,5 +246,6 @@ Some settings can be configured in both the workflow file (as action inputs) and
 | Scanners to run | `scanners` | `scanners.*` | Action input filters; `.guardpr.yml` configures |
 | Config file path | `config-path` | -- | Action input only |
 | GitHub token | `github-token` | -- | Action input only |
+| Pro API key | `pro-api-key` | -- | Action input only |
 
 The `scanners` action input acts as a filter: if set to `"secrets,dependencies"`, only those two scanners run, regardless of what is enabled in `.guardpr.yml`. The `.guardpr.yml` file still controls the detailed configuration for each scanner.

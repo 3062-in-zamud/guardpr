@@ -27,6 +27,7 @@ scanners:
     # Enable or disable secret scanning.
     # Default: true
     enabled: true
+    # Language-agnostic: scans content patterns across all file types.
     # Maximum file size to scan in megabytes. Larger files are skipped.
     # Default: 10
     maxTargetMegabytes: 10
@@ -34,6 +35,7 @@ scanners:
   # Dependency vulnerability detection via OSV-Scanner.
   dependencies:
     # Enable or disable dependency scanning.
+    # Language-agnostic: scans ecosystem lockfiles/manifests.
     # Scans lockfiles: package-lock.json, yarn.lock, pnpm-lock.yaml, etc.
     # Default: true
     enabled: true
@@ -75,6 +77,12 @@ scanners:
         requiredMiddleware: ["isAdmin"]
       - pattern: "/api/*"
         requiredMiddleware: ["isAuthenticated"]
+
+# Pro Configuration
+# ⚠️  Do NOT put your API key in this file — it will be committed to Git.
+#     Use GitHub Secrets instead:
+#       pro-api-key: ${{ secrets.GUARDPR_PRO_API_KEY }}
+#     See: https://github.com/3062-in-zamud/guardpr#community-vs-pro
 
 # Patching constraints.
 patching:

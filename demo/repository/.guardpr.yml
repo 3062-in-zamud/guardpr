@@ -1,0 +1,30 @@
+confidenceThreshold: 0.8
+createPr: true
+runTests: false
+testCommand: "npm test"
+
+scanners:
+  secrets:
+    enabled: true
+    maxTargetMegabytes: 10
+  dependencies:
+    enabled: true
+  xss:
+    enabled: true
+    customSanitizers: []
+  authz:
+    enabled: true
+    framework: auto
+    authMiddleware:
+      - isAuthenticated
+      - isAdmin
+      - requireAuth
+    protectedRoutes:
+      - pattern: "/api/admin/*"
+        requiredMiddleware: ["isAdmin"]
+      - pattern: "/api/*"
+        requiredMiddleware: ["isAuthenticated"]
+
+patching:
+  maxLinesPerPatch: 80
+  maxFilesPerPatch: 10

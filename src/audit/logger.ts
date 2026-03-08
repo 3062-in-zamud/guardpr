@@ -23,6 +23,7 @@ export class AuditLogger {
     const maskedConfig: Record<string, unknown> = {
       ...params.config,
       githubToken: "***",
+      pro: { ...params.config.pro, apiKey: "***" },
     };
 
     const logWithoutChecksum: Omit<AuditLogEntry, "checksum"> = {
