@@ -223,7 +223,7 @@ Your GuardPR Pro API key. When set, GuardPR sends **aggregate statistics only** 
 
 ```yaml
 # In your workflow file:
-- uses: 3062-in-zamud/guardpr@v1
+- uses: 3062-in-zamud/guardpr@v0
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     pro-api-key: ${{ secrets.GUARDPR_PRO_API_KEY }}

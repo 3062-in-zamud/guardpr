@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run GuardPR (${{ matrix.scanner }})
-        uses: 3062-in-zamud/guardpr@v1
+        uses: 3062-in-zamud/guardpr@v0
         id: guardpr
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: 3062-in-zamud/guardpr@v1
+      - uses: 3062-in-zamud/guardpr@v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -138,7 +138,7 @@ patching:
 Use the `scanners` input in the workflow to run only specific scanners:
 
 ```yaml
-- uses: 3062-in-zamud/guardpr@v1
+- uses: 3062-in-zamud/guardpr@v0
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     scanners: "secrets,dependencies"   # Only run these scanners
@@ -149,7 +149,7 @@ Use the `scanners` input in the workflow to run only specific scanners:
 Run scans without creating PRs. Findings are recorded in the audit log artifact:
 
 ```yaml
-- uses: 3062-in-zamud/guardpr@v1
+- uses: 3062-in-zamud/guardpr@v0
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     create-pr: "false"
@@ -237,7 +237,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: 3062-in-zamud/guardpr@v1
+      - uses: 3062-in-zamud/guardpr@v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -245,7 +245,7 @@ jobs:
 ## Using outputs in subsequent steps
 
 ```yaml
-- uses: 3062-in-zamud/guardpr@v1
+- uses: 3062-in-zamud/guardpr@v0
   id: guardpr
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}

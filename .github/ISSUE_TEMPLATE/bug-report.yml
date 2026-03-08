@@ -13,7 +13,7 @@ body:
     attributes:
       label: GuardPR Version
       description: Which version of GuardPR are you using?
-      placeholder: "e.g., v1.0.0"
+      placeholder: "e.g., v0.2.0"
     validations:
       required: true
 

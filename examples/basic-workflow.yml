@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: 3062-in-zamud/guardpr@v1
+      - uses: 3062-in-zamud/guardpr@v0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
