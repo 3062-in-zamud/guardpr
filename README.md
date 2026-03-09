@@ -6,6 +6,7 @@
     <a href="https://github.com/3062-in-zamud/guardpr/actions"><img src="https://github.com/3062-in-zamud/guardpr/workflows/CI/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <a href="https://github.com/3062-in-zamud/guardpr/releases"><img src="https://img.shields.io/github/v/release/3062-in-zamud/guardpr?include_prereleases" alt="Release"></a>
+    <a href="https://scorecard.dev/viewer/?uri=github.com/3062-in-zamud/guardpr"><img src="https://api.scorecard.dev/projects/github.com/3062-in-zamud/guardpr/badge" alt="OpenSSF Scorecard"></a>
   </p>
   <p align="center">
     <a href="#quick-start">Quick Start</a> · <a href="#features">Features</a> · <a href="docs/">Docs</a> · <a href="README.ja.md">日本語</a>
