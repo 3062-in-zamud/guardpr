@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Exclude vendored/generated files from diffs
+dist/index.js -diff
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
