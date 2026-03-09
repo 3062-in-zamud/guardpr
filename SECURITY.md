@@ -5,7 +5,7 @@
 If you discover a security vulnerability in GuardPR, please report it responsibly:
 
 1. **Open a GitHub issue** with the `security` label. Do not include exploit details in the issue title.
-2. Alternatively, contact the maintainer directly via the email listed on the [GitHub profile](https://github.com/3062-in-zamud).
+2. Alternatively, contact the maintainer directly at [3062.in.zamud@gmail.com](mailto:3062.in.zamud@gmail.com).
 3. We aim to acknowledge reports within **48 hours** and provide a fix or mitigation within **7 days** for critical issues.
 
 Please do not publicly disclose the vulnerability until a fix has been released.
