@@ -1,11 +1,16 @@
 <p align="center">
   <img src="docs/images/logo.png" alt="GuardPR" width="480">
   <br>
-  <p align="center">GitHub リポジトリのセキュリティ脆弱性を自動検出し、修正 PR を生成する GitHub Action</p>
+  <p align="center">セキュリティ修正PRを自動生成 — 外部送信ゼロ、テスト検証済み、完全無料</p>
   <p align="center">
     <a href="https://github.com/3062-in-zamud/guardpr/actions"><img src="https://github.com/3062-in-zamud/guardpr/workflows/CI/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <a href="https://github.com/3062-in-zamud/guardpr/releases"><img src="https://img.shields.io/github/v/release/3062-in-zamud/guardpr?include_prereleases" alt="Release"></a>
+  </p>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Zero_External_Transmission-brightgreen?style=for-the-badge" alt="Zero External Transmission">
+    <img src="https://img.shields.io/badge/Test--Verified_PRs-blue?style=for-the-badge" alt="Test-Verified PRs">
+    <img src="https://img.shields.io/badge/100%25_Free_%26_OSS-orange?style=for-the-badge" alt="100% Free & OSS">
   </p>
   <p align="center">
     <a href="#クイックスタート">クイックスタート</a> · <a href="#機能">機能</a> · <a href="docs/">ドキュメント</a> · <a href="README.md">English</a>
@@ -87,6 +92,36 @@ jobs:
 
 Gitleaks のシークレットパターン一覧は [Gitleaks デフォルトルール](https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml) を参照してください。
 OSV-Scanner の対応ロックファイル形式は [OSV-Scanner ドキュメント](https://google.github.io/osv-scanner/supported-languages-and-lockfiles/) を参照してください。
+
+## GuardPR の位置づけ
+
+セキュリティツールのエコシステムには、優れたソリューションが揃っています。
+GuardPR はそれらを置き換えることを目的としていません。
+**外部アカウントやデータ送信なしに、GitHub Action 単体でスキャンから修正 PR まで完結させる**
+という特定のニーズに応えるために設計されています。
+
+成熟したセキュリティプログラムでは GuardPR と [CodeQL][cql]、[Snyk][snyk]、[Pixee][pixee] を組み合わせて
+使うことが最適解になるケースもあります。
+
+| | **GuardPR** | [**Copilot Autofix**][ca] | [**Snyk**][snyk] | [**CodeQL**][cql] | [**Pixee**][pixee] |
+|---|---|---|---|---|---|
+| **What it does** | Scan + auto-patch PR in one Action | AI-generated fix suggestions for CodeQL alerts | Broad SCA, SAST, container, IaC coverage | Deep SAST for 10+ languages | Converts SARIF results from any scanner into fix PRs |
+| **Deployment** | GitHub Action (yaml only) | GitHub native UI | SaaS + CLI + Action | GitHub Action / CLI | GitHub App |
+| **Accounts required** | None (GitHub token only) | GitHub Copilot plan | Snyk account | None (public repos) | Pixee account |
+| **Fix delivery** | Draft PR with patch | Inline suggestion in PR | Advisory + guided fix | Alert only (no auto-patch) | Draft PR with patch |
+| **Code leaves runner** | No (Community mode) | Sent to AI model | Sent to Snyk cloud | No | Sent to Pixee cloud |
+| **Language scope** | JS/TS (XSS, Authz) + all files (secrets, SCA) | 9 languages | 20+ languages | 10+ languages | Java, Python, JS/TS |
+| **Free for private repos** | Yes | Requires paid plan | Requires paid plan | Requires GHAS | Free tier available |
+| **Open source** | Yes (MIT) | No | No | Yes (queries: MIT) | Partially |
+
+> Feature data reflects publicly available information as of March 2026.
+> See each tool's documentation for current details.
+> Contributions to keep this table accurate are welcome — please open an issue or PR.
+
+[ca]: https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/responsible-use-autofix-code-scanning
+[snyk]: https://snyk.io/
+[cql]: https://codeql.github.com/
+[pixee]: https://docs.pixee.ai/
 
 ## Community vs Pro
 
@@ -189,6 +224,20 @@ patching:
 
 ## セキュリティとプライバシー
 
+### 外部送信ゼロ（Zero External Transmission）
+
+すべての処理は GitHub Actions ランナー内で完結します。データは外部に送信されません。
+
+| データ | 外部送信先 | GuardPR の動作 |
+|--------|-----------|---------------|
+| ソースコード | 外部サービス | 送信しない |
+| シークレット / トークン | LLM / AI API | 送信しない |
+| スキャン結果 | サードパーティサーバー | 送信しない |
+| PR コンテンツ | GuardPR サーバー | サーバー自体が存在しない |
+| パッケージ名 | OSV.dev | 送信する（`npm audit` と同等） |
+
+詳細は [ADR-006](docs/adr/006-no-external-transmission.md) を参照してください。
+
 - **Community モードは外部テレメトリなし**: すべての処理は Actions ランナー上で実行。OSV-Scanner のみがパッケージ名で OSV.dev に問い合わせます（ソースコードは送信しません）。Pro モードは `pro-api-key` を明示設定した場合に限り統計情報のみ送信します。
 - **5 層シークレット防御**: 検出、ランタイムマスキング、パッチ抑制、監査ログ墨消し、PR 説明文の墨消し。
 - **バイナリ整合性検証**: スキャナーバイナリは実行前に SHA-256 チェックサムで検証。
@@ -209,6 +258,64 @@ permissions:
 
 - [基本ワークフロー](examples/basic-workflow.yml) -- 最小構成、全てデフォルト設定。
 - [高度なワークフロー](examples/advanced-workflow.yml) -- マトリクス戦略、スキャナーごとの実行、ステップサマリー。
+
+### フル構成
+
+全スキャナー有効、スケジュール実行、permissions 明記:
+
+```yaml
+name: GuardPR Security Scan (Full)
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  schedule:
+    - cron: '0 9 * * 1'  # 毎週月曜 9:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: 3062-in-zamud/guardpr@v0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          create-pr: true
+          run-tests: true
+          scanners: secrets,dependencies,xss,authz
+          confidence-threshold: '0.8'
+```
+
+### Pro 構成
+
+`pro-api-key` によるダッシュボード連携（Coming Soon）:
+
+```yaml
+name: GuardPR Security Scan (Pro)
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: 3062-in-zamud/guardpr@v0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pro-api-key: ${{ secrets.GUARDPR_PRO_KEY }}  # Coming soon
+```
 
 ## ドキュメント
 
