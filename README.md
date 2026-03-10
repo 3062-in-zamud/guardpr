@@ -1,12 +1,17 @@
 <p align="center">
   <img src="docs/images/logo.png" alt="GuardPR" width="480">
   <br>
-  <p align="center">Automated security vulnerability detection and fix PR generation for GitHub repositories</p>
+  <p align="center">Automated Security Fix PRs — Zero external transmission, test-verified, and free.</p>
   <p align="center">
     <a href="https://github.com/3062-in-zamud/guardpr/actions"><img src="https://github.com/3062-in-zamud/guardpr/workflows/CI/badge.svg" alt="CI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
     <a href="https://github.com/3062-in-zamud/guardpr/releases"><img src="https://img.shields.io/github/v/release/3062-in-zamud/guardpr?include_prereleases" alt="Release"></a>
     <a href="https://scorecard.dev/viewer/?uri=github.com/3062-in-zamud/guardpr"><img src="https://api.scorecard.dev/projects/github.com/3062-in-zamud/guardpr/badge" alt="OpenSSF Scorecard"></a>
+  </p>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Zero_External_Transmission-brightgreen?style=for-the-badge" alt="Zero External Transmission">
+    <img src="https://img.shields.io/badge/Test--Verified_PRs-blue?style=for-the-badge" alt="Test-Verified PRs">
+    <img src="https://img.shields.io/badge/100%25_Free_%26_OSS-orange?style=for-the-badge" alt="100% Free & OSS">
   </p>
   <p align="center">
     <a href="#quick-start">Quick Start</a> · <a href="#features">Features</a> · <a href="docs/">Docs</a> · <a href="README.ja.md">日本語</a>
@@ -88,6 +93,36 @@ Every finding includes a **confidence score**. Only findings above the configure
 
 For the full list of Gitleaks secret patterns, see the [Gitleaks default rules](https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml).
 For all OSV-Scanner supported lockfile formats, see the [OSV-Scanner documentation](https://google.github.io/osv-scanner/supported-languages-and-lockfiles/).
+
+## How GuardPR Fits In
+
+The security tooling ecosystem offers excellent solutions at every layer.
+GuardPR does not aim to replace them — it fills a specific niche:
+an end-to-end **scan → patch → test → PR** pipeline that runs entirely
+on your GitHub Actions runner, with no external accounts or data transmission required.
+
+Using GuardPR alongside [CodeQL][cql], [Snyk][snyk], or [Pixee][pixee]
+is often the right choice for mature security programs.
+
+| | **GuardPR** | [**Copilot Autofix**][ca] | [**Snyk**][snyk] | [**CodeQL**][cql] | [**Pixee**][pixee] |
+|---|---|---|---|---|---|
+| **What it does** | Scan + auto-patch PR in one Action | AI-generated fix suggestions for CodeQL alerts | Broad SCA, SAST, container, IaC coverage | Deep SAST for 10+ languages | Converts SARIF results from any scanner into fix PRs |
+| **Deployment** | GitHub Action (yaml only) | GitHub native UI | SaaS + CLI + Action | GitHub Action / CLI | GitHub App |
+| **Accounts required** | None (GitHub token only) | GitHub Copilot plan | Snyk account | None (public repos) | Pixee account |
+| **Fix delivery** | Draft PR with patch | Inline suggestion in PR | Advisory + guided fix | Alert only (no auto-patch) | Draft PR with patch |
+| **Code leaves runner** | No (Community mode) | Sent to AI model | Sent to Snyk cloud | No | Sent to Pixee cloud |
+| **Language scope** | JS/TS (XSS, Authz) + all files (secrets, SCA) | 9 languages | 20+ languages | 10+ languages | Java, Python, JS/TS |
+| **Free for private repos** | Yes | Requires paid plan | Requires paid plan | Requires GHAS | Free tier available |
+| **Open source** | Yes (MIT) | No | No | Yes (queries: MIT) | Partially |
+
+> Feature data reflects publicly available information as of March 2026.
+> See each tool's documentation for current details.
+> Contributions to keep this table accurate are welcome — please open an issue or PR.
+
+[ca]: https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/responsible-use-autofix-code-scanning
+[snyk]: https://snyk.io/
+[cql]: https://codeql.github.com/
+[pixee]: https://docs.pixee.ai/
 
 ## Community vs Pro
 
@@ -190,6 +225,20 @@ All processing happens on the GitHub Actions runner. In Community mode, no code 
 
 ## Security & Privacy
 
+### Zero External Transmission
+
+All processing runs inside the GitHub Actions runner. Nothing leaves your environment.
+
+| Data | External destination | GuardPR behavior |
+|------|---------------------|-----------------|
+| Source code | External services | Never sent |
+| Secrets / tokens | LLM / AI APIs | Never sent |
+| Scan results | Third-party servers | Never sent |
+| PR content | GuardPR servers | No server exists |
+| Package names | OSV.dev | Sent (same as `npm audit`) |
+
+See [ADR-006](docs/adr/006-no-external-transmission.md) for the full policy.
+
 - **Community mode has no external telemetry**: All processing occurs on the Actions runner. Only OSV-Scanner queries OSV.dev with package names (no source code). Pro mode sends aggregate statistics only when explicitly enabled with `pro-api-key`.
 - **5-layer secret defense**: Detection, runtime masking, patch suppression, audit log redaction, PR description redaction.
 - **Binary integrity**: Scanner binaries verified via SHA-256 checksum before execution.
@@ -210,6 +259,64 @@ permissions:
 
 - [Basic workflow](examples/basic-workflow.yml) -- Minimal setup, all defaults.
 - [Advanced workflow](examples/advanced-workflow.yml) -- Matrix strategy, per-scanner runs, step summary.
+
+### Full Configuration
+
+All scanners enabled, scheduled runs, explicit permissions:
+
+```yaml
+name: GuardPR Security Scan (Full)
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  schedule:
+    - cron: '0 9 * * 1'  # Weekly Monday 9am UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: 3062-in-zamud/guardpr@v0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          create-pr: true
+          run-tests: true
+          scanners: secrets,dependencies,xss,authz
+          confidence-threshold: '0.8'
+```
+
+### Pro Configuration
+
+With `pro-api-key` for dashboard integration (coming soon):
+
+```yaml
+name: GuardPR Security Scan (Pro)
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: 3062-in-zamud/guardpr@v0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pro-api-key: ${{ secrets.GUARDPR_PRO_KEY }}  # Coming soon
+```
 
 ## Documentation
 
