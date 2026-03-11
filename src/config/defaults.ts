@@ -35,5 +35,6 @@ export const DEFAULT_CONFIG: GuardPRConfig = {
   pro: {
     apiKey: "",
     endpoint: GUARDPR_PRO_WEBHOOK_ENDPOINT,
+    licenseKey: "",
   },
 };

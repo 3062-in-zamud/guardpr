@@ -1,0 +1,36 @@
+# Example: CodeQL + GuardPR integration
+# Run CodeQL first, then pass SARIF output to GuardPR for unified reporting
+name: "Security Scan (CodeQL + GuardPR)"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          output: codeql-results
+
+      - name: GuardPR Security Scan
+        uses: 3062-in-zamud/guardpr@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sarif-file: codeql-results/javascript.sarif

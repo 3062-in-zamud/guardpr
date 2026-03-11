@@ -29,7 +29,7 @@ const dependencyInfoSchema = z.object({
 const findingSchema = z.object({
   fingerprint: z.string(),
   scannerId: z.string(),
-  category: z.enum(["secrets", "dependencies", "xss", "authz"]),
+  category: z.enum(["secrets", "dependencies", "xss", "authz", "external"]),
   severity: z.enum(["P0", "P1", "P2"]),
   cwe: z.string().optional(),
   title: z.string(),

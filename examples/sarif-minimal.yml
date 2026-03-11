@@ -1,0 +1,28 @@
+# Example: Minimal SARIF import
+# Import results from any SARIF-producing tool
+name: "GuardPR with SARIF Import"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run external scanner
+        run: |
+          # Replace with your SARIF-producing tool
+          echo "Running scanner..."
+
+      - name: GuardPR Security Scan
+        uses: 3062-in-zamud/guardpr@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sarif-file: results.sarif

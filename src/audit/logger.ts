@@ -23,7 +23,12 @@ export class AuditLogger {
     const maskedConfig: Record<string, unknown> = {
       ...params.config,
       githubToken: "***",
-      pro: { ...params.config.pro, apiKey: "***" },
+      pro: {
+        ...params.config.pro,
+        apiKey: "***",
+        slackWebhookUrl: params.config.pro.slackWebhookUrl !== undefined ? "***" : undefined,
+        teamsWebhookUrl: params.config.pro.teamsWebhookUrl !== undefined ? "***" : undefined,
+      },
     };
 
     const logWithoutChecksum: Omit<AuditLogEntry, "checksum"> = {

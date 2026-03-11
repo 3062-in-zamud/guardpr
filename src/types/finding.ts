@@ -1,4 +1,4 @@
-export type DetectionCategory = "secrets" | "dependencies" | "xss" | "authz";
+export type DetectionCategory = "secrets" | "dependencies" | "xss" | "authz" | "external";
 
 export type Severity = "P0" | "P1" | "P2";
 

@@ -1,0 +1,22 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "FPTool",
+          "rules": [{ "id": "FP001", "shortDescription": { "text": "Fingerprint test" } }]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "FP001",
+          "level": "warning",
+          "message": { "text": "Finding with fingerprint" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/x.ts" }, "region": { "startLine": 1 } } }],
+          "fingerprints": { "primaryLocationLineHash": "custom-fingerprint-abc123" }
+        }
+      ]
+    }
+  ]
+}

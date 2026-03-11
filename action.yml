@@ -33,6 +33,18 @@ inputs:
   pro-api-key:
     description: "GuardPR Pro API key for dashboard integration (optional, use GitHub Secrets)"
     required: false
+  pro-license-key:
+    description: "Pro license key to unlock premium features (format: GPR-XXXX-XXXX-XXXX-XXXX)"
+    required: false
+  pro-slack-webhook-url:
+    description: "Slack Incoming Webhook URL for Pro scan notifications (use GitHub Secrets)"
+    required: false
+  pro-teams-webhook-url:
+    description: "Teams Incoming Webhook URL for Pro scan notifications (use GitHub Secrets)"
+    required: false
+  sarif-file:
+    description: "Path to SARIF 2.1.0 file to import external scanner results"
+    required: false
 
 outputs:
   findings-count:

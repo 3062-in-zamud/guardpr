@@ -1,0 +1,72 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "CodeQL",
+          "version": "2.15.0",
+          "semanticVersion": "2.15.0",
+          "rules": [
+            {
+              "id": "js/xss",
+              "name": "js/xss",
+              "shortDescription": { "text": "Client-side cross-site scripting" },
+              "fullDescription": { "text": "Writing user input directly to the DOM allows for a cross-site scripting vulnerability." },
+              "properties": {
+                "tags": ["security", "external/cwe/cwe-79"],
+                "precision": "high",
+                "kind": "path-problem"
+              }
+            },
+            {
+              "id": "js/hardcoded-credentials",
+              "name": "js/hardcoded-credentials",
+              "shortDescription": { "text": "Hard-coded credentials" },
+              "fullDescription": { "text": "Hard-coding credentials in source code may enable an attacker to gain unauthorized access." },
+              "properties": {
+                "tags": ["security", "external/cwe/cwe-798"],
+                "precision": "high"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "js/xss",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": { "text": "Cross-site scripting vulnerability due to [user-provided value](1)." },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/components/Comment.tsx", "uriBaseId": "%SRCROOT%" },
+                "region": { "startLine": 42, "endLine": 42, "startColumn": 5, "endColumn": 30 }
+              }
+            }
+          ],
+          "fingerprints": { "primaryLocationLineHash": "codeql-xss-fp-001" }
+        },
+        {
+          "ruleId": "js/hardcoded-credentials",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": { "text": "This hardcoded credential is used in [authentication](1)." },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "src/config/db.ts" },
+                "region": { "startLine": 8, "endLine": 8 }
+              }
+            }
+          ]
+        }
+      ],
+      "automationDetails": {
+        "id": "javascript/analyses/2024-01-15"
+      }
+    }
+  ]
+}

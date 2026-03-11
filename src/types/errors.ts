@@ -10,7 +10,8 @@ export type ErrorCode =
   | "RESOURCE_EXHAUSTED"
   | "CHECKSUM_MISMATCH"
   | "PATCH_APPLY_FAILED"
-  | "TEST_TIMEOUT";
+  | "TEST_TIMEOUT"
+  | "LICENSE_INVALID";
 
 export class GuardPRError extends Error {
   public readonly code: ErrorCode;

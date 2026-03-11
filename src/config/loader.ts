@@ -17,6 +17,10 @@ export interface ActionInputs {
   scanners: string;
   githubToken: string;
   proApiKey?: string;
+  licenseKey?: string;
+  slackWebhookUrl?: string;
+  teamsWebhookUrl?: string;
+  sarifFile?: string;
 }
 
 function parseScannerOverrides(
@@ -97,6 +101,9 @@ export async function loadConfig(
     pro: {
       apiKey: actionInputs.proApiKey ?? "",
       endpoint: DEFAULT_CONFIG.pro.endpoint,
+      licenseKey: actionInputs.licenseKey ?? "",
+      slackWebhookUrl: actionInputs.slackWebhookUrl,
+      teamsWebhookUrl: actionInputs.teamsWebhookUrl,
     },
   };
 

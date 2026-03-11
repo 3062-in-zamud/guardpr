@@ -1,0 +1,38 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "CWETool",
+          "rules": [
+            {
+              "id": "XSS001",
+              "shortDescription": { "text": "XSS vulnerability" },
+              "properties": { "tags": ["external/cwe/cwe-79"] }
+            },
+            {
+              "id": "SECRET001",
+              "shortDescription": { "text": "Hardcoded secret" },
+              "properties": { "tags": ["external/cwe/cwe-798"] }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "XSS001",
+          "level": "error",
+          "message": { "text": "XSS found" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/page.tsx" }, "region": { "startLine": 15 } } }]
+        },
+        {
+          "ruleId": "SECRET001",
+          "level": "warning",
+          "message": { "text": "Secret found" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/config.ts" }, "region": { "startLine": 3 } } }]
+        }
+      ]
+    }
+  ]
+}

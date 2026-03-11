@@ -39,6 +39,9 @@ export interface PatchingConfig {
 export interface ProConfig {
   apiKey: string;
   endpoint: string;
+  licenseKey: string;
+  slackWebhookUrl?: string;
+  teamsWebhookUrl?: string;
 }
 
 export interface GuardPRConfig {

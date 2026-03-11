@@ -28,6 +28,10 @@ import { info, warn, error, startGroup, endGroup, writeSummary } from "./utils/l
 import { buildWebhookPayload } from "./webhook/payload";
 import { sendWebhook } from "./webhook/sender";
 import { runOnboarding } from "./onboarding/welcome-issue";
+import { enforceLicenseGate, isProEnabled } from "./license/gate";
+import { loadSarifFile } from "./sarif/loader";
+import { dispatchNotifications } from "./notifications/dispatcher";
+import { countBySeverity } from "./webhook/payload";
 
 const VERSION = "0.3.0";
 
@@ -45,6 +49,10 @@ function parseActionInputs(): ActionInputs {
     scanners: core.getInput("scanners") || "all",
     githubToken: core.getInput("github-token"),
     proApiKey: core.getInput("pro-api-key") || undefined,
+    licenseKey: core.getInput("pro-license-key") || undefined,
+    slackWebhookUrl: core.getInput("pro-slack-webhook-url") || undefined,
+    teamsWebhookUrl: core.getInput("pro-teams-webhook-url") || undefined,
+    sarifFile: core.getInput("sarif-file") || undefined,
   };
 }
 
@@ -149,6 +157,24 @@ async function run(): Promise<void> {
     const config = await loadConfig(actionInputs.configPath, actionInputs);
     info(`Confidence threshold: ${config.confidenceThreshold}`);
     info(`Scanners: ${actionInputs.scanners}`);
+
+    // License gate
+    enforceLicenseGate(config.pro.licenseKey);
+    if (isProEnabled(config.pro.licenseKey)) {
+      info("Pro mode enabled");
+    } else {
+      info("Community mode");
+    }
+
+    // Warn on misconfiguration: webhook URLs set without license
+    if (!isProEnabled(config.pro.licenseKey)) {
+      if (config.pro.slackWebhookUrl !== undefined || config.pro.teamsWebhookUrl !== undefined) {
+        warn(
+          "Slack/Teams webhook URL is configured but no valid Pro license key was provided. " +
+            "Notifications will be skipped. Add a pro-license-key input to enable Pro features.",
+        );
+      }
+    }
     endGroup();
 
     // 3. Set up scanner registry
@@ -194,6 +220,33 @@ async function run(): Promise<void> {
         } catch {
           toolVersions[scanner.id] = "unknown";
         }
+      }
+    }
+
+    // 4.5. Import SARIF results
+    if (actionInputs.sarifFile !== undefined) {
+      try {
+        info(`Importing SARIF file: ${actionInputs.sarifFile}`);
+        const sarifFindings = loadSarifFile(
+          path.resolve(workDir, actionInputs.sarifFile),
+        );
+        if (sarifFindings.length > 0) {
+          const toolName = sarifFindings[0]!.scannerId;
+          scanResults.push({
+            scannerId: toolName,
+            status: "success",
+            findings: sarifFindings,
+            durationMs: 0,
+            exitCode: 0,
+          });
+          info(`SARIF import: ${sarifFindings.length} finding(s) from ${toolName}`);
+        } else {
+          info("SARIF import: 0 findings");
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`SARIF import failed: ${msg}`);
+        warn(`SARIF import failed: ${msg}`);
       }
     }
 
@@ -433,6 +486,21 @@ async function run(): Promise<void> {
         warn(`Pro webhook failed (non-fatal): ${err instanceof Error ? err.message : String(err)}`);
       }
       endGroup();
+    }
+
+    // 16.5 Pro notifications (Slack/Teams)
+    {
+      const notifCtx = getContext();
+      const allForNotif = [...highConfidence, ...lowConfidence];
+      await dispatchNotifications(config, {
+        highConfidenceCount: highConfidence.length,
+        lowConfidenceCount: lowConfidence.length,
+        bySeverity: countBySeverity(allForNotif),
+        prUrl,
+        prNumber,
+        repository: `${notifCtx.owner}/${notifCtx.repo}`,
+        runId: notifCtx.runId,
+      });
     }
 
     // 17. Set action outputs

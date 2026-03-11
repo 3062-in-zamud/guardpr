@@ -13,7 +13,7 @@ export interface WebhookPayload {
     highConfidenceCount: number;
     lowConfidenceCount: number;
     bySeverity: { P0: number; P1: number; P2: number };
-    byCategory: { secrets: number; dependencies: number; xss: number; authz: number };
+    byCategory: { secrets: number; dependencies: number; xss: number; authz: number; external: number };
     scannerResults: {
       scannerId: string;
       status: string;
@@ -49,6 +49,7 @@ const webhookPayloadSchema = z
         dependencies: z.number(),
         xss: z.number(),
         authz: z.number(),
+        external: z.number(),
       }),
       scannerResults: z.array(
         z.object({
@@ -87,7 +88,7 @@ export interface BuildWebhookPayloadParams {
   totalDurationMs: number;
 }
 
-function countBySeverity(findings: Finding[]): { P0: number; P1: number; P2: number } {
+export function countBySeverity(findings: Finding[]): { P0: number; P1: number; P2: number } {
   let P0 = 0;
   let P1 = 0;
   let P2 = 0;
@@ -104,18 +105,21 @@ function countByCategory(findings: Finding[]): {
   dependencies: number;
   xss: number;
   authz: number;
+  external: number;
 } {
   let secrets = 0;
   let dependencies = 0;
   let xss = 0;
   let authz = 0;
+  let external = 0;
   for (const f of findings) {
     if (f.category === "secrets") secrets++;
     else if (f.category === "dependencies") dependencies++;
     else if (f.category === "xss") xss++;
     else if (f.category === "authz") authz++;
+    else if (f.category === "external") external++;
   }
-  return { secrets, dependencies, xss, authz };
+  return { secrets, dependencies, xss, authz, external };
 }
 
 export function buildWebhookPayload(params: BuildWebhookPayloadParams): WebhookPayload {

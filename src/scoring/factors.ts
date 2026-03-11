@@ -231,6 +231,18 @@ export class AuthzFactorCalculator implements FactorCalculator {
   }
 }
 
+export class ExternalFactorCalculator implements FactorCalculator {
+  calculate(_finding: Finding): ConfidenceFactor[] {
+    return [
+      {
+        name: "externalTool",
+        score: 0.95,
+        reason: "External tool finding — default high confidence",
+      },
+    ];
+  }
+}
+
 export function getFactorCalculator(category: DetectionCategory): FactorCalculator {
   switch (category) {
     case "secrets":
@@ -241,5 +253,9 @@ export function getFactorCalculator(category: DetectionCategory): FactorCalculat
       return new XssFactorCalculator();
     case "authz":
       return new AuthzFactorCalculator();
+    case "external":
+      return new ExternalFactorCalculator();
+    default:
+      throw new Error(`Unknown category: ${category as string}`);
   }
 }

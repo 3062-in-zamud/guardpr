@@ -23,10 +23,11 @@ interface CategoryCounts {
   dependencies: number;
   xss: number;
   authz: number;
+  external: number;
 }
 
 function countByCategory(findings: Finding[]): CategoryCounts {
-  const counts: CategoryCounts = { secrets: 0, dependencies: 0, xss: 0, authz: 0 };
+  const counts: CategoryCounts = { secrets: 0, dependencies: 0, xss: 0, authz: 0, external: 0 };
   for (const f of findings) {
     counts[f.category] += 1;
   }
@@ -39,6 +40,7 @@ function categoryLabel(category: DetectionCategory): string {
     dependencies: "Dependencies",
     xss: "XSS",
     authz: "Authorization",
+    external: "External",
   };
   return labels[category];
 }

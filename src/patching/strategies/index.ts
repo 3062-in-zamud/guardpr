@@ -19,6 +19,10 @@ export function getStrategy(category: DetectionCategory): PatchStrategy {
       return new XssSanitizationStrategy() as unknown as PatchStrategy;
     case "authz":
       return new AuthzMiddlewareStrategy() as unknown as PatchStrategy;
+    case "external":
+      return new SecretNotificationStrategy() as unknown as PatchStrategy;
+    default:
+      throw new Error(`Unknown category: ${category as string}`);
   }
 }
 

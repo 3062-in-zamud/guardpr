@@ -1,0 +1,37 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "MultiTool",
+          "rules": [
+            { "id": "ERR001", "shortDescription": { "text": "Error finding" } },
+            { "id": "WARN001", "shortDescription": { "text": "Warning finding" } },
+            { "id": "NOTE001", "shortDescription": { "text": "Note finding" } }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "ERR001",
+          "level": "error",
+          "message": { "text": "Critical issue" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/a.ts" }, "region": { "startLine": 1 } } }]
+        },
+        {
+          "ruleId": "WARN001",
+          "level": "warning",
+          "message": { "text": "Warning issue" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/b.ts" }, "region": { "startLine": 5 } } }]
+        },
+        {
+          "ruleId": "NOTE001",
+          "level": "note",
+          "message": { "text": "Info note" },
+          "locations": [{ "physicalLocation": { "artifactLocation": { "uri": "src/c.ts" }, "region": { "startLine": 20 } } }]
+        }
+      ]
+    }
+  ]
+}

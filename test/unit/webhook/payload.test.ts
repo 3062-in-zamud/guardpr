@@ -1,56 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { buildWebhookPayload, BuildWebhookPayloadParams } from "../../../src/webhook/payload";
-import { Finding, Patch, ScanResult } from "../../../src/types";
-
-function makeFinding(overrides: Partial<Finding> = {}): Finding {
-  return {
-    fingerprint: "fp-1",
-    scannerId: "test-scanner",
-    category: "dependencies",
-    severity: "P1",
-    title: "Test vulnerability",
-    description: "A detailed description with code path src/app.ts:10",
-    location: { file: "src/app.ts", startLine: 10, endLine: 10 },
-    codeSnippet: "const secret = process.env.API_KEY;",
-    confidence: 0.95,
-    confidenceFactors: [{ name: "pattern-match", score: 0.9, reason: "matched known pattern" }],
-    rawData: { internalField: "should-not-leak" },
-    ...overrides,
-  };
-}
-
-function makePatch(overrides: Partial<Patch> = {}): Patch {
-  return {
-    findingFingerprints: ["fp-1"],
-    title: "Fix vulnerability",
-    type: "auto-fix",
-    rationale: "Upgrade dependency",
-    rollbackSteps: ["Revert"],
-    fileChanges: [
-      {
-        filePath: "src/app.ts",
-        diff: "--- a/src/app.ts\n+++ b/src/app.ts\n@@ -1 +1 @@\n-old\n+new",
-        changeType: "modify",
-        modifiedContent: "const safe = sanitize(input);",
-      },
-    ],
-    status: "tests-passed",
-    breakingRisk: "low",
-    ...overrides,
-  };
-}
-
-function makeScanResult(overrides: Partial<ScanResult> = {}): ScanResult {
-  return {
-    scannerId: "test-scanner",
-    status: "success",
-    findings: [makeFinding()],
-    durationMs: 1500,
-    exitCode: 0,
-    ...overrides,
-  };
-}
+import { makeFinding, makePatch, makeScanResult } from "../../helpers/factories";
 
 const baseParams: BuildWebhookPayloadParams = {
   version: "1.1.0",
@@ -82,7 +33,7 @@ describe("buildWebhookPayload", () => {
     expect(payload.scan.highConfidenceCount).toBe(0);
     expect(payload.scan.lowConfidenceCount).toBe(0);
     expect(payload.scan.bySeverity).toEqual({ P0: 0, P1: 0, P2: 0 });
-    expect(payload.scan.byCategory).toEqual({ secrets: 0, dependencies: 0, xss: 0, authz: 0 });
+    expect(payload.scan.byCategory).toEqual({ secrets: 0, dependencies: 0, xss: 0, authz: 0, external: 0 });
     expect(payload.patches.total).toBe(0);
     expect(payload.pr.created).toBe(false);
     expect(payload.performance.totalDurationMs).toBe(5000);
@@ -117,7 +68,7 @@ describe("buildWebhookPayload", () => {
       lowConfidence: [makeFinding({ category: "dependencies", fingerprint: "fp-5" })],
     });
 
-    expect(payload.scan.byCategory).toEqual({ secrets: 1, dependencies: 1, xss: 2, authz: 1 });
+    expect(payload.scan.byCategory).toEqual({ secrets: 1, dependencies: 1, xss: 2, authz: 1, external: 0 });
   });
 
   it("includes scanner results", () => {

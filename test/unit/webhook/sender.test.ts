@@ -16,7 +16,7 @@ const minimalPayload: WebhookPayload = {
     highConfidenceCount: 0,
     lowConfidenceCount: 0,
     bySeverity: { P0: 0, P1: 0, P2: 0 },
-    byCategory: { secrets: 0, dependencies: 0, xss: 0, authz: 0 },
+    byCategory: { secrets: 0, dependencies: 0, xss: 0, authz: 0, external: 0 },
     scannerResults: [],
   },
   patches: { total: 0, testsPassed: 0, testsFailed: 0 },
